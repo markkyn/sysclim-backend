@@ -7,10 +7,9 @@ class Medico(models.Model):
         max_length = 12,
         primary_key = True,
         unique = True,
-        required = True,
-
     )
     
     profissional = models.ForeignKey(
         ProfissionalSaude,
+        on_delete = models.CASCADE
     )

@@ -42,28 +42,23 @@ class Endereco(models.Model):
 class Paciente(models.Model):
     nome = models.CharField(
         max_length = 64,
-        required = True,
         unique = True,
     )
 
     cpf = models.CharField(
         max_length = 11,
-        required = True,
         unique = True,
         primary_key = True
     )
     
     genero = models.CharField(
         max_length = 1,
-        required = True
     )
 
     email = models.EmailField(
-        required = True,
     )
 
     dt_nascimento = models.DateField(
-        required = True,
     )
 
 # Profissionais
@@ -116,6 +111,7 @@ class Enfermeiro(models.Model):
 
     profissional = models.ForeignKey(
         ProfissionalSaude,
+        on_delete = models.CASCADE
     )
 
 class Assistente(models.Model):
