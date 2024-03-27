@@ -1,0 +1,22 @@
+version: "3.9"
+name: sysclim
+services:
+  web:
+    build: .
+    command: python manage.py runserver 0.0.0.0:8000
+    volumes:
+      - ../src:/app
+      - ./requirements.txt:/app/requirements.txt
+    ports:
+      - "8123:8000"
+    depends_on:
+      - db
+  db:
+    image: postgres
+    environment:
+      - POSTGRES_DB=sysclim
+      - POSTGRES_USER=admin
+      - POSTGRES_PASSWORD=tywVckN6pc6DbGsKcgV2
+    ports:
+      - "5123:5123"
+    restart: unless-stopped
