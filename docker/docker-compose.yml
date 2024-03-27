@@ -16,7 +16,7 @@ services:
     environment:
       - POSTGRES_DB=sysclim
       - POSTGRES_USER=admin
-      - POSTGRES_PASSWORD=tywVckN6pc6DbGsKcgV2
+      - POSTGRES_PASSWORD=password
     ports:
-      - "5123:5123"
+      - "5123:5432"
     restart: unless-stopped
