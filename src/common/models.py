@@ -3,46 +3,58 @@ from django.db import models
 # Uso Geral
 class Endereco(models.Model):
     rua = models.CharField(
-        max_lenght = 64,
-        required = True
+        max_length = 64,
+        blank = False,
+        null = False
     )
     
     numero = models.CharField(
-        required = False
+        blank = False,
+        null = True
     )
 
     complemento = models.CharField(
-        required = False,
+        blank = False,
+        null = True,
     )
 
     estado = models.CharField(
-        max_lenght = 2
+        max_length = 2,
+        blank = False,
+        null = False,
     )
     
     cidade = models.CharField(
-        max_lenght = 24
+        max_length = 24,
+        blank = False,
+        null = False,
+
     )
 
     cep = models.CharField(
-        max_lenght = 8
+        max_length = 8,
+        blank = False,
+        null = True,
+
     )
 
 # Paciente
 class Paciente(models.Model):
     nome = models.CharField(
-        max_lenght = 64,
+        max_length = 64,
         required = True,
         unique = True,
     )
 
     cpf = models.CharField(
-        max_lenght = 11,
+        max_length = 11,
         required = True,
-        unique = True
+        unique = True,
+        primary_key = True
     )
     
     genero = models.CharField(
-        max_lenght = 1,
+        max_length = 1,
         required = True
     )
 
@@ -57,47 +69,49 @@ class Paciente(models.Model):
 # Profissionais
 class Especializacao(models.Model):
     nome = models.CharField(
-        max_lenght = 64,
-        required = True,
+        max_length = 64,
         unique = True
     )
-
-    # código unico de especialidade de saúde
-    tuss = models.CharField(
-        max_lenght = 24,
-        required = True,
-        unique = True
+   
+    tuss = models.CharField( # código unico de especialidade de saúde
+        max_length = 24,
+        unique = True,
+        primary_key = True
     )
 
 class ProfissionalSaude(models.Model):
-    nome = models.CharField(
-        max_lenght = 64,
-        required = True,
+    cpf = models.CharField(
+        primary_key = True,
+        max_length = 11,
+        unique = True,
     )
 
-    cpf = models.CharField(
-        max_lenght = 11,
-        required = True,
-        unique = True
+    nome = models.CharField(
+        max_length = 64,
     )
+
     genero = models.CharField(
-        max_lenght = 1,
-        required = True,
+        max_length = 1,
     )
+    
     email = models.EmailField(
-        required = True,
     )
 
     dt_nascimento = models.DateField(
-        required = True,
+    )
+    
+    cargo = models.CharField(
+    )
+
+    ativo = models.BooleanField(
+        default = True    
     )
     
 class Enfermeiro(models.Model):
     coren = models.CharField(
-        max_lenght = 12,
+        unique = True,
+        max_length = 12,
         primary_key = True,
-        required = True,
-        unique = True
     )
 
     profissional = models.ForeignKey(
@@ -106,5 +120,5 @@ class Enfermeiro(models.Model):
 
 class Assistente(models.Model):
     nome = models.CharField(
-        max_lenght = 64,
+        max_length = 64,
     )
