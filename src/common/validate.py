@@ -1,0 +1,1 @@
+def validate_profissional(profissional, cargo, dados_cargo):
