@@ -7,6 +7,7 @@ from rest_framework import status
 from common.models import *
 from .serializers import *
 
+
 # Endereco
 @api_view(['POST'])
 def create_endereco(request):
@@ -14,23 +15,24 @@ def create_endereco(request):
 
     if endereco_serializer.is_valid():
         try:
-            endereco = EnderecoSerializer.objects.create(
-                rua = endereco_serializer.validated_data[""],
-                numero = endereco_serializer.validated_data[""],
-                complemento = endereco_serializer.validated_data[""],
+            endereco = Endereco.objects.create(
+                rua = endereco_serializer.validated_data["rua"],
+                numero = endereco_serializer.validated_data["numero"],
+                bairro = endereco_serializer.validated_data["bairro"],
+                complemento = endereco_serializer.validated_data["complemento"],
                 estado = endereco_serializer.validated_data["estado"],
                 cidade = endereco_serializer.validated_data["cidade"],
                 cep = endereco_serializer.validated_data["cidade"],
             )
 
-
-
-            return Response({"message":"Endereço Cadastrado com sucesso!"})
-        except:
-            return Response({"message":"Ocorreu um erro desconhecido, por favor contate a equipe técnica"})
-
-
-    return Response()
+            return Response({"message":"Endereço cadastrado com sucesso!"})
+        except Exception as e:
+            return Response({
+                "message":"Ocorreu um erro desconhecido, por favor contate a equipe técnica",
+                "errors": str(e)
+            })
+    else:
+        return Response({"message":"O formato do endereço está incorreto, realize a criação com o endereço correto"})
 
 @api_view(['GET'])
 def get_endereco(request, id):
@@ -46,25 +48,89 @@ def get_endereco(request, id):
 
 @api_view(['GET'])
 def list_endereco(request):
-    pass
+    enderecos = Endereco.objects.all()
+    
+    endereco_serializer = EnderecoSerializer(enderecos, many=True)
+
+    return Response(endereco_serializer.data)
+
+# Sala
+@api_view(['GET'])
+def list_sala(request):
+    try:
+        salas = Sala.objects.all()
+        serializer = SalaSerializer(salas, many=True)
+        return Response(serializer.data)
+    except Exception as e:
+        return Response({"message": "Erro ao listar salas", "errors": str(e)})
+
+@api_view(['POST'])
+def create_sala(request):
+    serializer = SalaSerializer(data=request.data)
+    if serializer.is_valid():
+        serializer.save()
+        return Response({"message": "Sala criada com sucesso", "sala": serializer.data}, status=201)
+    else:
+        return Response({"message": "Erro ao criar sala", "errors": serializer.errors})
+
+@api_view(['GET'])
+def get_sala(request, numero):
+    try:
+        sala = Sala.objects.get(numero=numero)
+        serializer = SalaSerializer(sala)
+        return Response(serializer.data)
+    except Sala.DoesNotExist:
+        return Response({"message": "Sala não encontrada"}, status=404)
+    except Exception as e:
+        return Response({"message": "Erro ao buscar sala", "errors": str(e)})
+
 
 # Assistente
 @api_view(['POST'])
 def create_assistente(request):
-    pass
+    assistente_serializer = AssistenteSerializer(data=request.data)
+
+    if assistente_serializer.is_valid():
+        try:
+            assistente = Assistente.objects.create(
+                nome = assistente_serializer.validated_data["nome"]
+            )
+
+            return Response({
+                "message":"Assistente cadastrado com sucesso!",
+                "assistente_id": assistente.id
+            })
+        except Exception as e:
+            return Response({
+                "message":"Ocorreu um erro desconhecido, por favor contate a equipe técnica",
+                "errors": str(e)
+            })
+    else:
+        return Response({"message":"O formato do endereço está incorreto, realize a criação com o endereço correto"})
 
 @api_view(['GET'])
 def list_assistente(request):
-    pass
+    assistentes = Assistente.objects.all()
+
+    assistente_serializer = AssistenteSerializer(assistentes, many = True)
+
+    return Response(assistente_serializer.data)
 
 @api_view(['PUT'])
 def disable_assistente(request):
+    # TODO: não tenho certeza se PUT seria a melhor opção para modificar o ativo do assistente
     pass
 
 # Paciente
 @api_view(['GET'])
 def list_paciente(request):
-    pass
+    try:
+        pacientes = Paciente.objects.all()
+
+        paciente_serializer = PacienteSerializer(pacientes, many = True)
+        return Response(paciente_serializer.data)
+    except: 
+        return Response({"message": "Erro Inesperado, contate a equipe técnica"})
 
 @api_view(['POST'])
 def create_paciente(request):
@@ -72,25 +138,74 @@ def create_paciente(request):
         Cria um Paciente:
 
         {
-            "assistente": 04511800545,
+            "assistente_id": 1,
             "paciente" : {
                 "nome": "Marcos Gabriel",
                 "cpf": "12345678901",
                 "genero": "M",
                 "email" :"marcos.gabriel@email.com",
-                "dt_nascimento": "01/01/2001",
-                "endereco": {
-                    "rua":"",
-                    "bairro":"",
+                "dt_nascimento": "2001-01-01"
+            },
+            "endereco": {
+                    "rua":"Rua Joaquina",
+                    "bairro":"Coringuinha",
                     "numero": "234",
-                    "complemento": "",
-                    ""
-                }
+                    "complemento": null,
+                    "cidade": "Aracaju",
+                    "estado": "SE"
             }
         }
 
     """
-    return Response()
+    paciente_input = CreatePacienteSerializer(data = request.data)
+    
+    if paciente_input.is_valid():
+        try:
+            assistente_id = paciente_input.validated_data["assistente_id"]
+            dados_paciente = paciente_input.validated_data["paciente"]
+            endereco = paciente_input.validated_data["endereco"]
+        
+            paciente = Paciente.objects.create(
+                created_by = Assistente.objects.get(id = assistente_id),
+                nome = dados_paciente["nome"],
+                cpf = dados_paciente["cpf"],
+                genero = dados_paciente["genero"],
+                email = dados_paciente["email"],
+                dt_nascimento = dados_paciente["dt_nascimento"]
+            )
+
+            endereco = Endereco.objects.create(
+                rua = endereco["rua"],
+                numero = endereco["numero"],
+                bairro = endereco["bairro"],
+                complemento = endereco["complemento"],
+                estado = endereco["estado"],
+                cidade = endereco["cidade"],
+                cep = endereco["cidade"],
+            )
+
+            return Response({
+                "message": "Pacinete Criado com sucesso",
+                "paciente_cpf": paciente.cpf,
+                "endereco_id": endereco.id
+            })
+        
+        except Assistente.DoesNotExist:
+            return Response({
+                "message":"O assistente não existe",
+                "errors": str(e)
+            })
+
+        except Exception as e:
+            return Response({
+                "message":"Ocorreu um erro desconhecido, por favor contate a equipe técnica",
+                "errors": str(e)
+            })
+    else:
+        return Response({
+            "message": "Formato Inválido",
+            "errors": paciente_input.errors 
+        })
 
 # Profissionais de Saude
 @api_view(['POST'])
@@ -171,3 +286,34 @@ def list_profissional_saude(request):
     serializer = ProfissionalSaudeSerializer(profissionais, many = True)
     
     return Response(serializer.data)
+
+
+# Especialidade
+@api_view(['GET'])
+def list_especialidade(request):
+    try:
+        especialidades = Especialidade.objects.all()
+        serializer = EspecialidadeSerializer(especialidades, many=True)
+        return Response(serializer.data)
+    except Exception as e:
+        return Response({"message": "Erro ao listar especialidades", "errors": str(e)})
+
+@api_view(['POST'])
+def create_especialidade(request):
+    serializer = EspecialidadeSerializer(data=request.data)
+    if serializer.is_valid():
+        serializer.save()
+        return Response({"message": "Especialidade criada com sucesso", "especialidade": serializer.data}, status=201)
+    else:
+        return Response({"message": "Erro ao criar especialidade", "errors": serializer.errors})
+
+@api_view(['GET'])
+def get_especialidade(request, tuss):
+    try:
+        especialidade = Especialidade.objects.get(tuss=tuss)
+        serializer = EspecialidadeSerializer(especialidade)
+        return Response(serializer.data)
+    except Especialidade.DoesNotExist:
+        return Response({"message": "Especialidade não encontrada"}, status=404)
+    except Exception as e:
+        return Response({"message": "Erro ao buscar especialidade", "errors": str(e)})

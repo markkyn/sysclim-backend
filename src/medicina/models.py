@@ -11,5 +11,5 @@ class Medico(models.Model):
     
     profissional = models.ForeignKey(
         ProfissionalSaude,
-        on_delete = models.CASCADE
+        on_delete = models.CASCADE # TODO: não estou familiarizado com os tipos de on_delete (alterar ou manter)
     )

@@ -15,15 +15,22 @@ class AssistenteSerializer(serializers.ModelSerializer):
         model = Assistente
         fields = "__all__"
 
+
+class SalaSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Sala
+        fields = '__all__'
+        
 # Paciente
 class PacienteSerializer(serializers.ModelSerializer):
     class Meta:
         model = Paciente
         fields = "__all__"
 
-class CreatePacienteSerializers(serializers.ModelSerializer):
+class CreatePacienteSerializer(serializers.Serializer):
     assistente_id = serializers.IntegerField()
     paciente = PacienteSerializer()
+    endereco = EnderecoSerializer()
 
 class MedicoSerializer(serializers.ModelSerializer):
     class Meta:
@@ -36,6 +43,12 @@ class EnfermeiroSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 # Profissional
+class EspecialidadeSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Especialidade
+        fields = '__all__'
+
+
 class ProfissionalSaudeSerializer(serializers.ModelSerializer):
     class Meta:
         model = ProfissionalSaude
