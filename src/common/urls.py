@@ -26,4 +26,9 @@ urlpatterns = [
     path("especialidade/create", create_especialidade, name = "create_especialidade"), # POST
     path("especialidade/<int:id>", get_especialidade, name = "get_especilidade"), # GET
 
+    # Sala
+    path("sala/all", list_sala, name="list_sala"),  # GET
+    path("sala/create", create_sala, name="create_sala"),  # POST
+    path("sala/<int:numero>", get_sala, name="get_sala"),  # GET
+
 ]

@@ -106,10 +106,6 @@ class ProfissionalSaude(models.Model):
         null = True,
         on_delete = models.SET_NULL
     )
-
-    escalas = models.ManyToManyField(
-        
-    )
     
 class Enfermeiro(models.Model):
     coren = models.CharField(
