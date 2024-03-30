@@ -32,38 +32,60 @@ class CreatePacienteSerializer(serializers.Serializer):
     paciente = PacienteSerializer()
     endereco = EnderecoSerializer()
 
+# Medico - Show
 class MedicoSerializer(serializers.ModelSerializer):
     class Meta:
         model = Medico
         fields = "__all__"
 
+# Medico - Input
+class InputMedicoSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Medico
+        fields = ("crm",)
+
+# Enfermeiro - Show
 class EnfermeiroSerializer(serializers.ModelSerializer):
     class Meta:
         model = Enfermeiro
         fields = '__all__'
 
-# Profissional
+class InputEnfermeiroSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Enfermeiro
+        fields = ("crm",)
+
+# Especialidade - Show
 class EspecialidadeSerializer(serializers.ModelSerializer):
     class Meta:
         model = Especialidade
         fields = '__all__'
 
 
+# Profissional - Show
 class ProfissionalSaudeSerializer(serializers.ModelSerializer):
     class Meta:
         model = ProfissionalSaude
         fields = "__all__"
 
+# Profissional - Input
+class InputProfissionalSaudeSerializer(serializers.ModelSerializer):
+    endereco = EnderecoSerializer()
+    class Meta:
+        model = ProfissionalSaude
+        fields = ("cpf", "nome","genero","email","dt_nascimento","ativo", "endereco")
+
+# Profissional - Create
 class CreateProfissionalSaudeSerializer(serializers.Serializer):
     assistente_id = serializers.IntegerField()
-    profissional = ProfissionalSaudeSerializer()
+    profissional = InputProfissionalSaudeSerializer()
     cargo = serializers.CharField(max_length = 24)
     info_cargo =  serializers.DictField()
 
     def validate_info_cargo(self, value):
         cargo = self.initial_data.get("cargo", None)
         if cargo == "médico":
-            serializer = MedicoSerializer(data=value)
+            serializer = InputMedicoSerializer(data=value)
         elif cargo == "enfermeiro":
             serializer = EnfermeiroSerializer(data=value)
         else:

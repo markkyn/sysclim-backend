@@ -106,6 +106,12 @@ class ProfissionalSaude(models.Model):
         null = True,
         on_delete = models.SET_NULL
     )
+
+    endereco = models.ForeignKey(
+        Endereco,
+        null = False,
+        on_delete = models.CASCADE
+    )
     
 class Enfermeiro(models.Model):
     coren = models.CharField(

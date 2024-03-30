@@ -1,6 +1,9 @@
 from django.shortcuts import render
+from django.contrib.auth import authenticate, logout
 
-from rest_framework.decorators import api_view
+from rest_framework.authtoken.models import Token
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework import status
 
@@ -8,7 +11,30 @@ from common.models import *
 from .serializers import *
 
 
+# Autenticação
+@api_view(['POST'])
+def login_view(request):
+    username = request.data.get('username')
+    password = request.data.get('password')
+    user = authenticate(username=username, password=password)
+    if user:
+        token, _ = Token.objects.get_or_create(user=user)
+        return Response({"token": token.key})
+    else:
+        return Response({"error": "Credenciais inválidas."}, status=status.HTTP_401_UNAUTHORIZED)
+    
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def logout_view(request):
+    try:
+        request.user.auth_token.delete()
+        return Response({"success": "Logout bem-sucedido."}, status=status.HTTP_200_OK)
+    except:
+        return Response({"error": "Erro durante o logout."}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
 # Endereco
+@permission_classes([IsAuthenticated])
 @api_view(['POST'])
 def create_endereco(request):
     endereco_serializer = EnderecoSerializer(data=request.data)
@@ -55,6 +81,7 @@ def list_endereco(request):
     return Response(endereco_serializer.data)
 
 # Sala
+@permission_classes([IsAuthenticated])
 @api_view(['GET'])
 def list_sala(request):
     try:
@@ -64,6 +91,7 @@ def list_sala(request):
     except Exception as e:
         return Response({"message": "Erro ao listar salas", "errors": str(e)})
 
+@permission_classes([IsAuthenticated])
 @api_view(['POST'])
 def create_sala(request):
     serializer = SalaSerializer(data=request.data)
@@ -73,6 +101,7 @@ def create_sala(request):
     else:
         return Response({"message": "Erro ao criar sala", "errors": serializer.errors})
 
+@permission_classes([IsAuthenticated])
 @api_view(['GET'])
 def get_sala(request, numero):
     try:
@@ -86,6 +115,7 @@ def get_sala(request, numero):
 
 
 # Assistente
+@permission_classes([IsAuthenticated])
 @api_view(['POST'])
 def create_assistente(request):
     assistente_serializer = AssistenteSerializer(data=request.data)
@@ -109,6 +139,7 @@ def create_assistente(request):
         return Response({"message":"O formato do endereço está incorreto, realize a criação com o endereço correto"})
 
 @api_view(['GET'])
+@permission_classes([IsAuthenticated])
 def list_assistente(request):
     assistentes = Assistente.objects.all()
 
@@ -116,12 +147,14 @@ def list_assistente(request):
 
     return Response(assistente_serializer.data)
 
+@permission_classes([IsAuthenticated])
 @api_view(['PUT'])
 def disable_assistente(request):
     # TODO: não tenho certeza se PUT seria a melhor opção para modificar o ativo do assistente
     pass
 
 # Paciente
+@permission_classes([IsAuthenticated])
 @api_view(['GET'])
 def list_paciente(request):
     try:
@@ -132,6 +165,7 @@ def list_paciente(request):
     except: 
         return Response({"message": "Erro Inesperado, contate a equipe técnica"})
 
+@permission_classes([IsAuthenticated])
 @api_view(['POST'])
 def create_paciente(request):
     """
@@ -208,6 +242,7 @@ def create_paciente(request):
         })
 
 # Profissionais de Saude
+@permission_classes([IsAuthenticated])
 @api_view(['POST'])
 def create_profissional_saude(request):
     """
@@ -243,7 +278,7 @@ def create_profissional_saude(request):
     if profissional_input.is_valid():
         dados_profissional = profissional_input.validated_data["profissional"]
         cargo = profissional_input.validated_data["cargo"]
-        info_cargo = profissional_input.validate_info_cargo["info_cargo"]
+        info_cargo = profissional_input.validated_data["info_cargo"] 
 
         profissional = ProfissionalSaude.objects.create(
             cpf  = dados_profissional["cpf"],
@@ -251,13 +286,22 @@ def create_profissional_saude(request):
             genero = dados_profissional["genero"],
             email = dados_profissional["email"],
             dt_nascimento = dados_profissional["dt_nascimento"],
+            endereco = Endereco.objects.create(
+                rua = dados_profissional["endereco"].get("rua", None),
+                bairro = dados_profissional["endereco"].get("bairro", None),
+                numero = dados_profissional["endereco"].get("numero", None),
+                complemento = dados_profissional["endereco"].get("complemento", None),
+                estado = dados_profissional["endereco"].get("estado", None),
+                cidade = dados_profissional["endereco"].get("cidade", None),
+                cep = dados_profissional["endereco"].get("cep", None),
+            ),
             cargo = cargo,
             ativo = True
         )
 
         if cargo == "médico":
             Medico.objects.create(
-                crm = info_cargo["coren"],
+                crm = info_cargo["crm"],
                 profissional = profissional 
             )
         elif cargo == "enfermeiro":
@@ -270,6 +314,7 @@ def create_profissional_saude(request):
     else:
         return Response(profissional_input.errors, status = status.HTTP_400_BAD_REQUEST)
 
+@permission_classes([IsAuthenticated])
 @api_view(['PUT'])
 def disable_profissional_saude(request):
     """
@@ -277,6 +322,7 @@ def disable_profissional_saude(request):
     """
     return Response()
 
+@permission_classes([IsAuthenticated])
 @api_view(['GET'])
 def list_profissional_saude(request):
     """
@@ -289,6 +335,7 @@ def list_profissional_saude(request):
 
 
 # Especialidade
+@permission_classes([IsAuthenticated])
 @api_view(['GET'])
 def list_especialidade(request):
     try:
@@ -299,6 +346,7 @@ def list_especialidade(request):
         return Response({"message": "Erro ao listar especialidades", "errors": str(e)})
 
 @api_view(['POST'])
+@permission_classes([IsAuthenticated])
 def create_especialidade(request):
     serializer = EspecialidadeSerializer(data=request.data)
     if serializer.is_valid():
@@ -308,6 +356,7 @@ def create_especialidade(request):
         return Response({"message": "Erro ao criar especialidade", "errors": serializer.errors})
 
 @api_view(['GET'])
+@permission_classes([IsAuthenticated])
 def get_especialidade(request, tuss):
     try:
         especialidade = Especialidade.objects.get(tuss=tuss)

@@ -7,7 +7,7 @@ from common.models import *
 
 class Medico(models.Model):
     crm = models.CharField(
-        max_length = 12,
+        max_length = 12, 
         primary_key = True,
         unique = True,
     )

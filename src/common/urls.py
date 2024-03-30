@@ -11,11 +11,11 @@ urlpatterns = [
     # Assistente
     path("assistente/all", list_assistente, name = "list_assistente"), # GET
     path("assistente/create", create_assistente, name = "create_assistente"), # POST
-
+    
     # Paciente
     path("paciente/all", list_paciente, name = "list_paciente"), # GET
     path("paciente/create", create_paciente, name = "create_paciente"), # POST
-
+    
     # Profissionais
     path("profissionais/all", list_profissional_saude, name="list_profissional_saude"), # GET
     path("profissionais/create", create_profissional_saude, name="create_profissional_saude"), # POST
