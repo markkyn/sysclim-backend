@@ -2,20 +2,123 @@
 {% load crispy_forms_tags %}
 {% block title %}Página Inicial{%endblock%}
 
-{% block content %}
-<div class="container">
-    <div class="row">
-        <h2 class="text-success text-center">Acesso ao Sistema</h2>
+{% block extra_css%}
+<style>
+    div.row {
+        margin: 0;
+    }
+</style>
+{%endblock%}
 
-        <form class="form-signin" action="" method="post" id="login-form">
-            {{ login_form | crispy }}
-            {% csrf_token %}
-             <div class="d-flex">
-                <button class="btn btn-login btn-block" type="submit" name="entrar">
-                    <strong>Entrar</strong>
-                </button>
+
+{% block content %}
+<div class="underline"></div>
+<!-- Painei de Consulta -->
+<div class="p-4">
+    <div class="row">
+        <div class="col-lg-6 col-md-6">
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <h2 class="text-center">
+                                2
+                            </h2>
+                        </div>
+                        <div class="col-md-8">
+                            <h2 class="text-center">
+                                Listar Consultas
+                            </h2>
+                        </div>
+                        <div class="col-md-12">
+                            <h4 class="text-center">
+                                <a href="{% url 'medicina:listar_consultas' %}" class="btn btn-link" style="color: white"> 
+                                    Detalhes <i class="glyphicon glyphicon-circle-arrow-right"></i>
+                                </a>
+                            </h4>
+                        </div>
+                    </div>
+                </div>
             </div>
-        </form>
+        </div>
+        <div class="col-lg-6 col-md-6">
+            <div class="panel panel-warning">
+                <div class="panel-heading">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <h2 class="text-center">
+                                2
+                            </h2>
+                        </div>
+                        <div class="col-md-8">
+                            <h2 class="text-center">
+                                Listar Exames
+                            </h2>
+                        </div>
+                        <div class="col-md-12">
+                            <h4 class="text-center">
+                                <a href="#" class="btn btn-link" style="color: white"> Detalhes <i class="glyphicon glyphicon-circle-arrow-right"></i>
+                                </a>
+                            </h4>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-6 col-md-6">
+            <div class="panel panel-success">
+                <div class="panel-heading">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <h2 class="text-center">
+                                2
+                            </h2>
+                        </div>
+                        <div class="col-md-8">
+                            <h2 class="text-center">
+                                Listar Profissionais
+                            </h2>
+                        </div>
+                        <div class="col-md-12">
+                            <h4 class="text-center">
+                                <a href="#" class="btn btn-link" style="color: white">
+                                    Detalhes <i class="glyphicon glyphicon-circle-arrow-right"></i>
+                                </a>
+                            </h4>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-6 col-md-6">
+            <div class="panel panel-danger">
+                <div class="panel-heading">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <h2 class="text-center">
+                                2
+                            </h2>
+                        </div>
+                        <div class="col-md-8">
+                            <h2 class="text-center">
+                                Listar Pacientes
+                            </h2>
+                        </div>
+                        <div class="col-md-12">
+                            <h4 class="text-center">
+                                <a href="#" class="btn btn-link" style="color: white">
+                                    Detalhes <i class="glyphicon glyphicon-circle-arrow-right"></i>
+                                </a>
+                            </h4>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
+<div class="underline"></div>
+
+
 {% endblock %}

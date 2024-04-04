@@ -6,13 +6,15 @@
 <head>
     <title>{% block title %} SysClim - Sistema de Gestão Clínica {% endblock %}</title>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta name="viewport"
+        content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
 
     <link rel="stylesheet" href="{% static 'css/reset.css' %}">
     <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
     <link rel="stylesheet" href="{% static 'css/base.css' %}">
     {% block extra_css%}
+    <!-- Bloco de CSS's extras definidos em cada página -->
     {%endblock%}
     <link rel="stylesheet" href="{% static 'css/custom-base-style.css' %}">
 
@@ -27,7 +29,8 @@
             <div class="container">
                 <div class="navbar-header">
                     <a class="navbar-brand" href="{% url 'index' %}" style="padding-top:7.5px !important;">
-                        <img class="visible-lg visible-md" alt="Brand" height="60px;" src="{% static 'img/logo_clinica.png' %}"/>
+                        <img class="visible-lg visible-md" alt="Brand" height="60px;"
+                            src="{% static 'img/logo_clinica.png' %}" />
                     </a>
                 </div>
                 <div id="navbar" class="navbar-collapse collapse">
@@ -41,23 +44,29 @@
             <div class="container">
                 <h4 class="col-md-4">Sistema de Gestão Clínica</h4>
                 <div class="col-md-8 visible-lg visible-md">
-                  {% block breadcrumb %}
-                  {% endblock %}
+                    {% block breadcrumb %}
+                    {% endblock %}
                 </div>
             </div>
         </div>
     </header>
-    
+
 
 
     <!-- Content -->
-    {% block content %}
-    {% endblock %}
+    <section class="container pb20">
+        <div id="base-content">
+            {% block content %}
+            {% endblock %}
+        </div>
+    </section>
 
     <footer>
         <div class="image-container">
-            <a href="https://www.ufs.br/"><img id="img_logoufs" src="{% static 'img/logo_ufs.png' %}" alt="Logomarca do SysClim"></a>
-            <a href="https://www.sigaa.ufs.br/sigaa/public/departamento/portal.jsf?id=83"><img id="img_logoufs" src="{% static 'img/logo_dcomp.jpg' %}" alt="Logomarca do LAIS"></a>
+            <a href="https://www.ufs.br/"><img id="img_logoufs" src="{% static 'img/logo_ufs.png' %}"
+                    alt="Logomarca do SysClim"></a>
+            <a href="https://www.sigaa.ufs.br/sigaa/public/departamento/portal.jsf?id=83"><img id="img_logoufs"
+                    src="{% static 'img/logo_dcomp.jpg' %}" alt="Logomarca do LAIS"></a>
         </div>
         <div class="footer-content">
             <p>2024 &copy; Departamento de Computação - UFS. Todos os direitos reservados.</p>

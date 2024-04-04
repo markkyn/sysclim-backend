@@ -2,21 +2,47 @@ from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, Permis
 from django.db import models
 
 class BaseUsuarioManager(BaseUserManager):
-    def create_user(self, email, nome, password=None, **extra_fields):
+    def create_user(self, email, cpf, nome, genero, dt_nascimento, cargo, especialidade_id, endereco_id, password=None,ativo=True, **extra_fields):
         """
-        Cria e retorna um usuário (assistente) com um endereço de email, nome e senha.
+        Cria e retorna um usuário (profissional) com um email, cpf, nome, genero, data de nascimento, 
+        cargo, status ativo, especialidade, endereco e senha.
         """
         if not email:
-            raise ValueError('Os assistentes devem ter um endereço de email válido.')
-        email = self.normalize_email(email)
-        assistente = self.model(email=email, nome=nome, **extra_fields)
-        assistente.set_password(password)
-        assistente.save(using=self._db)
-        return assistente
+            raise ValueError('Os profissionais devem ter um endereço de email válido.')
+        if not cpf:
+            raise ValueError('O CPF é necessário.')
+        if not nome:
+            raise ValueError('O nome é necessário.')
+        if not genero:
+            raise ValueError('O gênero é necessário.')
+        if not dt_nascimento:
+            raise ValueError('A data de nascimento é necessária.')
+        if not cargo:
+            raise ValueError('O cargo é necessário.')
 
-    def create_superuser(self, email, nome, password=None, **extra_fields):
+        email = self.normalize_email(email)
+        
+        profissional = self.model(
+            email=email,
+            cpf=cpf,
+            nome=nome,
+            genero=genero,
+            dt_nascimento=dt_nascimento,
+            cargo=cargo,
+            ativo=ativo,
+            especialidade_id=especialidade_id,
+            endereco_id=endereco_id,
+            **extra_fields
+        )
+        profissional.set_password(password)
+        profissional.save(using=self._db)
+        
+        return profissional
+
+    def create_superuser(self, email, cpf, nome, genero, dt_nascimento, cargo, especialidade_id, endereco_id, password=None, ativo=True, **extra_fields):
         """
-        Cria e retorna um superusuário (assistente) com um endereço de email, nome e senha.
+        Cria e retorna um superusuário (profissional) com um email, cpf, nome, genero, data de nascimento, 
+        cargo, status ativo, especialidade, endereco e senha, além de marcá-lo como staff e superuser.
         """
         extra_fields.setdefault('is_staff', True)
         extra_fields.setdefault('is_superuser', True)
@@ -26,7 +52,7 @@ class BaseUsuarioManager(BaseUserManager):
         if extra_fields.get('is_superuser') is not True:
             raise ValueError('Superusuário deve ter is_superuser=True.')
 
-        return self.create_user(email, nome, password, **extra_fields)
+        return self.create_user(email, cpf, nome, genero, dt_nascimento, cargo, especialidade_id, endereco_id, password, ativo, **extra_fields)
     
 class ModeloUsuario(AbstractBaseUser, PermissionsMixin):
     email = models.EmailField(unique=True)
@@ -36,7 +62,7 @@ class ModeloUsuario(AbstractBaseUser, PermissionsMixin):
     objects = BaseUsuarioManager()
 
     USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = []
+    REQUIRED_FIELDS = ['dt_nascimento', 'endereco_id', 'cpf', 'nome', 'genero', 'cargo', 'especialidade_id' ]
 
     class Meta:
         db_table = 'modelousuario'

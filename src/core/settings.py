@@ -44,9 +44,6 @@ INSTALLED_APPS = [
     'autenticacao',
 
     # 3rd Party Apps
-    'rest_framework',
-    'rest_framework.authtoken',
-    'corsheaders',
     'crispy_forms',
     "crispy_bootstrap4",
 ]
@@ -57,11 +54,6 @@ CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
 CORS_ALLOW_ALL_ORIGINS = True
 CORS_ALLOW_CREDENTIALS = True
-REST_FRAMEWORK = {
-    'DEFAULT_AUTHENTICATION_CLASSES': (
-        'rest_framework.authentication.TokenAuthentication',
-    ),
-}
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -71,7 +63,6 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
 ]
 
@@ -81,7 +72,8 @@ TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [
-            "core/views"
+            "core/views",
+            "medicina/views"
         ],
         'APP_DIRS': True,
         'OPTIONS': {
@@ -94,6 +86,7 @@ TEMPLATES = [
         },
     },
 ]
+
 WSGI_APPLICATION = 'core.wsgi.application'
 
 # Password validation

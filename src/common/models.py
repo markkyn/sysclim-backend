@@ -120,6 +120,7 @@ class ProfissionalSaude(ModeloUsuario):
     
 # TODO: Incluir mais atributos relevantes para o Assistente ( talvez CPF e Formação )
 class Assistente(models.Model):
+    profissional = models.ForeignKey(ProfissionalSaude, on_delete=models.CASCADE)
     nome = models.CharField(max_length = 64)
 
 
