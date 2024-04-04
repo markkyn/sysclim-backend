@@ -1,18 +1,15 @@
 from django.contrib import admin
 from django.urls import path, include
-from rest_framework_simplejwt.views import ( TokenObtainPairView, TokenRefreshView,)
+from django.conf.urls.static import static
+from django.conf import settings
 
-from common.views import login_view, logout_view
+from core.controllers import index
 
 urlpatterns = [
     path('admin', admin.site.urls),
+    path('', index, name="index"),
 
-    path('api/conf/', include('rest_framework.urls')),
     path('api/geral/', include('common.urls')),
     path('api/medicina/', include('medicina.urls')),
-    path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
-    path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
-    
-    path('login', login_view),
-    path('logout', logout_view),
-]
+
+] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

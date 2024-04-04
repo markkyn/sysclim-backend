@@ -1,5 +1,7 @@
 from django.db import models
 
+from autenticacao.models import *
+
 # Uso Geral
 class Endereco(models.Model):
     rua = models.CharField(
@@ -73,7 +75,10 @@ class Sala(models.Model):
         default = True,
     )
 
-class ProfissionalSaude(models.Model):
+class Assistente(models.Model):
+    nome = models.CharField(max_length = 64)
+
+class ProfissionalSaude(ModeloUsuario):
     cpf = models.CharField(
         primary_key = True,
         max_length = 11,
@@ -88,9 +93,6 @@ class ProfissionalSaude(models.Model):
         max_length = 1,
     )
     
-    email = models.EmailField(
-    )
-
     dt_nascimento = models.DateField(
     )
     
@@ -112,24 +114,21 @@ class ProfissionalSaude(models.Model):
         null = False,
         on_delete = models.CASCADE
     )
+
+    class Meta(ModeloUsuario.Meta):
+        db_table = 'profissional'
     
-class Enfermeiro(models.Model):
-    coren = models.CharField(
-        unique = True,
-        max_length = 12,
-        primary_key = True,
-    )
-
-    profissional = models.ForeignKey(
-        ProfissionalSaude,
-        on_delete = models.CASCADE
-    )
-
 # TODO: Incluir mais atributos relevantes para o Assistente ( talvez CPF e Formação )
 class Assistente(models.Model):
-    nome = models.CharField(
-        max_length = 64,
-    )
+    nome = models.CharField(max_length = 64)
+
+
+    def __str__(self):
+        return self.email
+
+    class Meta(ModeloUsuario.Meta):
+        db_table = 'assistente'
+
 
 class Escala(models.Model):
     dt_inicio = models.DateField()
