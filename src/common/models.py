@@ -115,6 +115,11 @@ class ProfissionalSaude(ModeloUsuario):
         on_delete = models.CASCADE
     )
 
+    def identificador_cargo(self):
+        if self.cargo == "assistente":
+            return Assistente.objects.get(profissional = self).id
+
+
     class Meta(ModeloUsuario.Meta):
         db_table = 'profissional'
     
@@ -163,6 +168,7 @@ class Paciente(models.Model):
     )
 
     dt_nascimento = models.DateField(
+        "Data de Nascimento",
         null  = False, 
         blank = False
     )
@@ -172,3 +178,7 @@ class Paciente(models.Model):
         on_delete = models.DO_NOTHING,
         default = None
     )
+
+    @property
+    def cpf_formatado(self):
+        return f"{self.cpf[0:2]}.{self.cpf[3:5]}.{self.cpf[6:9]}-{self.cpf[10:11]}"

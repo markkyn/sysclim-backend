@@ -1,4 +1,4 @@
-{% extends "base.html" %}
+{% extends "base/base.html" %}
 {% load crispy_forms_tags %}
 {% block title %}Página Inicial{%endblock%}
 
@@ -22,12 +22,12 @@
                     <div class="row">
                         <div class="col-md-4">
                             <h2 class="text-center">
-                                2
+                                {{consultas_count}}
                             </h2>
                         </div>
                         <div class="col-md-8">
                             <h2 class="text-center">
-                                Listar Consultas
+                                 Consultas
                             </h2>
                         </div>
                         <div class="col-md-12">
@@ -47,12 +47,12 @@
                     <div class="row">
                         <div class="col-md-4">
                             <h2 class="text-center">
-                                2
+                                {{exames_count}}
                             </h2>
                         </div>
                         <div class="col-md-8">
                             <h2 class="text-center">
-                                Listar Exames
+                                 Exames
                             </h2>
                         </div>
                         <div class="col-md-12">
@@ -71,12 +71,12 @@
                     <div class="row">
                         <div class="col-md-4">
                             <h2 class="text-center">
-                                2
+                                {{profissional_count}}
                             </h2>
                         </div>
                         <div class="col-md-8">
                             <h2 class="text-center">
-                                Listar Profissionais
+                                 Profissionais
                             </h2>
                         </div>
                         <div class="col-md-12">
@@ -97,17 +97,17 @@
                     <div class="row">
                         <div class="col-md-4">
                             <h2 class="text-center">
-                                2
+                                {{pacientes_count}}
                             </h2>
                         </div>
                         <div class="col-md-8">
                             <h2 class="text-center">
-                                Listar Pacientes
+                                 Pacientes
                             </h2>
                         </div>
                         <div class="col-md-12">
                             <h4 class="text-center">
-                                <a href="#" class="btn btn-link" style="color: white">
+                                <a href="{% url 'comum:listar_pacientes' %}" class="btn btn-link" style="color: white">
                                     Detalhes <i class="glyphicon glyphicon-circle-arrow-right"></i>
                                 </a>
                             </h4>

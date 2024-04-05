@@ -5,7 +5,7 @@ from medicina.models import Consulta
 class CadastroConsultaForm(forms.ModelForm):
     class Meta:
         model = Consulta
-        fields = ['dh_realizacao', 'objetivo', 'paciente', 'medico', 'sala', 'created_by']
+        fields = ['paciente','medico','sala', 'dh_realizacao', 'objetivo',]
         widgets = {
             'dh_realizacao': forms.DateTimeInput(attrs={'type': 'datetime-local'}, format='%Y-%m-%dT%H:%M'),
             'objetivo': forms.Textarea(attrs={'rows': 4, 'cols': 40}),

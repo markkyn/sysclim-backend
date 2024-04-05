@@ -3,6 +3,8 @@ from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
 
 from .forms import LoginForm
+from common.models import *
+from medicina.models import *
 
 def login_ctrl(request):
     if request.method == "POST":
@@ -23,4 +25,9 @@ def login_ctrl(request):
 
 @login_required(login_url="/login/")
 def index(request):
-    return render(request, "index.html", locals())
+    consultas_count = Consulta.objects.all().count()
+    pacientes_count = Paciente.objects.all().count()
+    exames_count = Exame.objects.all().count()
+    profissional_count = ProfissionalSaude.objects.all().count()
+
+    return render(request, "base/index.html", locals())

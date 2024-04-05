@@ -1,6 +1,7 @@
 from datetime import datetime
 
 from django.db import models
+from django.db.models import Q
 
 from common.models import *
 
@@ -16,9 +17,21 @@ class Medico(models.Model):
         ProfissionalSaude,
         on_delete = models.CASCADE # TODO: não estou familiarizado com os tipos de on_delete (alterar ou manter)
     )
+   
+    def verificar_disponibilidade(self, data_hora_inicio, duracao=1):
+        data_hora_fim = data_hora_inicio + datetime.timedelta(hours=duracao)
+
+        consultas_no_periodo = Consulta.objects.filter(
+            Q(dh_realizacao__lt=data_hora_fim) &
+            Q(dh_realizacao__gte=data_hora_inicio),
+            medico=self
+        ).exists()
+
+        return not consultas_no_periodo
 
 class Consulta(models.Model):
     dh_realizacao = models.DateTimeField(
+        "Data e Hora de Realização",
         default = datetime.now()
     )
 

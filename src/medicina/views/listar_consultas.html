@@ -1,4 +1,4 @@
-{% extends "base.html" %}
+{% extends "base/base.html" %}
 {% load crispy_forms_tags %}
 {% block title %}Listar Consultas{%endblock%}
 
@@ -12,7 +12,7 @@
             <br>
         </div>
         <div class="col-md-3">
-            <a href="#"
+            <a href="{% url 'medicina:agendar_consulta' %}"
                class="btn btn-primary btn-block">Nova Consulta</a>
         </div>
 </div>

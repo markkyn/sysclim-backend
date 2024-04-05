@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'common',
     'medicina',
     'autenticacao',
+    'enfermagem',
 
     # 3rd Party Apps
     'crispy_forms',
