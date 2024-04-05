@@ -2,7 +2,6 @@ from django.db import models
 from common.models import ProfissionalSaude
 
 
-# Create your models here.
 class Enfermeiro(models.Model):
     coren = models.CharField(
         unique = True,
@@ -14,3 +13,6 @@ class Enfermeiro(models.Model):
         ProfissionalSaude,
         on_delete = models.CASCADE
     )
+
+    class Meta:
+        db_table = 'enfermeiro'

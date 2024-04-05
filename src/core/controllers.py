@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 
 from .forms import LoginForm
@@ -22,6 +22,11 @@ def login_ctrl(request):
         login_form = LoginForm()
 
     return render(request, "login.html", locals())
+
+@login_required(login_url="/login/")
+def logout_ctrl(request):
+    logout(request)
+    return redirect('login')
 
 @login_required(login_url="/login/")
 def index(request):

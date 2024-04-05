@@ -1,12 +1,12 @@
 {% extends "base/base.html" %}
 {% load crispy_forms_tags %}
-{% block title %}Listar Consultas{%endblock%}
+{% block title %}Cadastrar Especialidade{%endblock%}
 
 
 {% block content%}
 <div class="row">
     <div class="col-md-9">
-        <h2 class="custom-page-title">Cadastro de Paciente</h2>
+        <h2 class="custom-page-title">Cadastro de Especialidade</h2>
     </div>
 </div>
 <div class="underline"></div>
@@ -15,11 +15,8 @@
     {% csrf_token %}
      <div class="d-flex">
         <button class="btn btn-login btn-block" type="submit" name="entrar">
-            <strong>Cadastrar Paciente</strong>
+            <strong>Cadastrar Especialidade</strong>
         </button>
     </div>
 </form>
-<div class="underline"></div>
-<div class="underline"></div>
-
 {% endblock %}

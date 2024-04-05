@@ -20,16 +20,15 @@ def agendar_consulta(request):
     if request.method == 'POST':
         form = CadastroConsultaForm(request.POST)
         if form.is_valid():
-            cpf = form.cleaned_data['cpf']
-            crm = form.cleaned_data['crm']
-            dh_realizacao = form.cleaned_data['dh_realizacao']
-            sala_id = form.cleaned_data['sala']
-            assistente_id = request.user.assistente.id
+            medico = Medico.objects.get(crm=form.cleaned_data['medico'].crm)
+            paciente = Paciente.objects.get(cpf=form.cleaned_data['paciente'].cpf)
 
-            paciente = get_object_or_404(Paciente, cpf=cpf)
-            medico = get_object_or_404(Medico, crm=crm)
-            sala = get_object_or_404(Sala, id=sala_id)
-            assistente = get_object_or_404(Assistente, id=assistente_id)
+            dh_realizacao = form.cleaned_data['dh_realizacao']
+            sala_numero = form.cleaned_data['sala'].numero
+            profissional = request.user
+
+            sala = Sala.objects.get(numero = sala_numero)
+            assistente = get_object_or_404(Assistente, profissional=profissional)
 
             if medico.verificar_disponibilidade(dh_realizacao):
                 consulta = Consulta.objects.create(
@@ -55,26 +54,26 @@ def cancelar_consulta(request, id):
     return redirect("index")
 
 @login_required(login_url="/login/")
-def reagendar_consulta(request, id):
+def reagendar_consulta(request,id):
     if request.method == 'POST':
-        form = ReagendamentoConsultaForm()
-
+        form = ReagendamentoConsultaForm(request.POST)
         if form.is_valid():
-            consulta_antiga = Consulta.objects.get(id = id)
-            novo_horario = form.cleaned_data["novo_horario"]
-
-            if consulta_antiga.medico.verificar_disponibilidade(novo_horario):
-                # Disponivel
-                consulta_antiga.setNovoHorario(novo_horario)
-
-            else:
-                # Indisponivel
-                # Mensagem de Erro
-                pass
-
+            pass
     else:
         form = ReagendamentoConsultaForm()
-    
-    return render(request, "consultas/reagendamento_consulta.html")
 
+    return render(request, "consultas/reagendamento_consulta.html", locals())
 
+@login_required(login_url="/login/")
+def realizar_consulta(request, id):
+    consulta = Consulta.objects.get(id = id)
+
+    return render(request, "consultas/executar_consulta.html", locals())
+
+@login_required(login_url="/login/")
+def finalizar_consulta(request, id):
+    consulta = Consulta.objects.get(id = id)
+    consulta.finalizado = True
+    consulta.save()
+
+    return redirect("index")

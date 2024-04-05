@@ -51,12 +51,13 @@ def cadastrar_paciente(request):
                     dt_nascimento = form.cleaned_data["dt_nascimento"],
                     created_by = Assistente.objects.get(id = request.user.identificador_cargo())
                 )
-            except:
+            except Exception as e:
                 endereco.delete()
-                form.add_error(None, "Erro ao cadastrar paciente.")
+                form.add_error(None, f"Erro ao cadastrar paciente. {str(e)}")
+                
+                return render(request, "pacientes/cadastrar_paciente.html", {'form': form})
 
-                return redirect("comum:listar_pacientes")
-            
+            return redirect("comum:listar_pacientes")
     else:
         form = CadastroPacienteForm()
 
@@ -112,10 +113,12 @@ def cadastrar_profissional(request):
                 if form.cleaned_data["cargo"] == "médico":
                     Medico.objects.create(
                         crm = form.cleaned_data["codigo_cargo"],
+                        profissional = profissional
                     )
                 elif form.cleaned_data["cargo"] == "enfermeiro":
                     Enfermeiro.objects.create(
                         coren = form.cleaned_data["codigo_cargo"],
+                        profissional = profissional
                     )   
 
                 return redirect("comum:listar_profissionais")
@@ -144,10 +147,9 @@ def cadastrar_sala(request):
             try:
                 sala = Sala.objects.create(
                     numero = form.cleaned_data["numero"],
-                    especialidade = form.cleaned_data["especialidade"],
                 )
 
-                return redirect("comum:listar_salas")
+                return redirect("index")
             except Exception as e:
                 form.add_error(None, f"{str(e)}")
                 return render(request, "dependencias/cadastrar_sala.html", {'form': form})
@@ -155,3 +157,24 @@ def cadastrar_sala(request):
         form = CadastroSalaForm()
 
     return render(request, "dependencias/cadastrar_sala.html", {'form': form})
+
+# Especialidades
+@login_required(login_url="/login/")
+def cadastrar_especialidade(request):
+    if request.method == 'POST':
+        form = CadastroEspecialidadeForm(request.POST)
+        if form.is_valid():
+            try:
+                especialidade = Especialidade.objects.create(
+                    tuss = form.cleaned_data["tuss"],
+                    nome = form.cleaned_data["nome"],
+                )
+
+                return redirect("index")
+            except Exception as e:
+                form.add_error(None, f"{str(e)}")
+                return render(request, "especialidades/cadastrar_especialidades.html", {'form': form})
+    else:
+        form = CadastroEspecialidadeForm()
+
+    return render(request, "especialidades/cadastrar_especialidades.html", {'form': form})

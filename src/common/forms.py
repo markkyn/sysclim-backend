@@ -70,4 +70,7 @@ class CadastroProfissionalForm(forms.Form):
 
 class CadastroSalaForm(forms.Form):
     numero = forms.IntegerField(label="Número")
-    especialidade = forms.ModelChoiceField(label="Especialidade",queryset=Especialidade.objects.all())
+
+class CadastroEspecialidadeForm(forms.Form):
+    tuss = forms.CharField(label="TUSS", max_length=24)
+    nome = forms.CharField(label="Nome da Especialidade", max_length=64)

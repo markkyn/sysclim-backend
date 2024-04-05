@@ -8,13 +8,14 @@
     <div class="col-md-9">
         <h2 class="custom-page-title">Consultas ({{consultas_count}})</h2>
     </div>
-        <div class="clearfix visible-xs-block visible-sm-block">
-            <br>
-        </div>
-        <div class="col-md-3">
-            <a href="{% url 'medicina:agendar_consulta' %}"
-               class="btn btn-primary btn-block">Nova Consulta</a>
-        </div>
+    <div class="clearfix visible-xs-block visible-sm-block">
+        <br>
+    </div>
+    {% if request.user.cargo == "assistente"%}
+    <div class="col-md-3">
+        <a href="{% url 'medicina:agendar_consulta' %}" class="btn btn-primary btn-block">Nova Consulta</a>
+    </div>
+    {% endif %}
 </div>
 <div class="underline"></div>
 
@@ -27,22 +28,30 @@
                 <th>Sala</th>
                 <th>Data de Realização</th>
                 <th>Criado Por</th>
+                {% if request.user.cargo == "assistente"%}
+                <th>Ações</th>
+                {%endif%}
             </tr>
         </thead>
         <tbody class="exames_body">
             {% for consulta in consultas %}
-                <tr>
-                    <td class="text-center">{{consulta.paciente.nome}}</td>
-                    <td>{{consulta.medico.nome}}</td>
-                    <td>{{consulta.sala}}</td>
-                    <td>{{consulta.dh_realizacao}}</td>
-                    <td>{{consulta.created_by.nome}}</td>
-                </tr>
+            <tr>
+                <td class="text-center">{{consulta.paciente.nome}}</td>
+                <td>{{consulta.medico}}</td>
+                <td>{{consulta.sala}}</td>
+                <td>{{consulta.dh_realizacao}}</td>
+                <td>{{consulta.created_by.nome}}</td>
+                {% if request.user.cargo == "assistente"%}
+                <td>
+                    <a href="{% url 'medicina:reagendar_consulta' consulta.id %}" class="btn btn-primary btn-block">Reagendar Consulta</a>
+                </td>
+                {%endif%}
+            </tr>
             {% empty %}
-                <tr>
-                    <td colspan="8" class="text-center">Nenhuma Consulta disponivel</td>
-                </tr>
+            <tr>
+                <td colspan="8" class="text-center">Nenhuma Consulta disponivel</td>
+            </tr>
             {% endfor %}
         </tbody>
     </table>
-{% endblock %}
+    {% endblock %}

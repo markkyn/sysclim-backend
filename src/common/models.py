@@ -51,9 +51,8 @@ class Endereco(models.Model):
     def __str__(self):
         return f"{self.rua}, {self.numero} - {self.bairro}, {self.cidade} - {self.estado} - {self.cep}"
 
-    #class Meta:
-        #db_table = 'endereco'
-
+    class Meta:
+        db_table = 'endereco'
 
 # Profissionais
 class Especialidade(models.Model):
@@ -71,20 +70,14 @@ class Especialidade(models.Model):
     def __str__(self) -> str:
         return f"{self.nome} ( TUSS: {self.tuss})"
 
-    #class Meta:
-        #db_table = 'especialidade'
+    class Meta:
+        db_table = 'especialidade'
 
 class Sala(models.Model):
     numero = models.IntegerField(
         primary_key = True,
         null = False,
         blank = False
-    )
-
-    especialidade = models.ForeignKey(
-        Especialidade,
-        null = True,
-        on_delete = models.SET_NULL
     )
 
     ativo = models.BooleanField(
@@ -108,8 +101,8 @@ class Sala(models.Model):
     def __str__(self):
         return f"Sala {self.numero}"
 
-    #class Meta:
-        #db_table = 'sala'
+    class Meta:
+        db_table = 'sala'
 
 class ProfissionalSaude(ModeloUsuario):
     cpf = models.CharField(
@@ -171,7 +164,6 @@ class Assistente(models.Model):
     class Meta(ModeloUsuario.Meta):
         db_table = 'assistente'
 
-
 class Escala(models.Model):
     dt_inicio = models.DateField()
     dt_final  = models.DateField()
@@ -183,8 +175,8 @@ class Escala(models.Model):
         default = True
     )
 
-    #class Meta:
-        #db_table = 'escala'
+    class Meta:
+        db_table = 'escala'
 
 # Paciente
 class Paciente(models.Model):
@@ -224,6 +216,12 @@ class Paciente(models.Model):
         default= None
     )
 
+    created_by = models.ForeignKey(
+        Assistente,
+        on_delete = models.DO_NOTHING,
+        default = None
+    )
+
     def __str__(self):
         return f"{self.nome} ({self.cpf_formatado})"
 
@@ -231,5 +229,5 @@ class Paciente(models.Model):
     def cpf_formatado(self):
         return f"{self.cpf[0:3]}.{self.cpf[3:6]}.{self.cpf[6:9]}-{self.cpf[9:11]}"
 
-    #class Meta:
-        #db_table = 'paciente'
+    class Meta:
+        db_table = 'paciente'

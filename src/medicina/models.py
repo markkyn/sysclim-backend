@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import timedelta
 
 from django.db import models
 from django.db.models import Q
@@ -18,7 +18,7 @@ class Medico(models.Model):
     )
    
     def verificar_disponibilidade(self, data_hora_inicio, duracao=1):
-        data_hora_fim = data_hora_inicio + datetime.timedelta(hours=duracao)
+        data_hora_fim = data_hora_inicio + timedelta(hours=duracao)
 
         consultas_no_periodo = Consulta.objects.filter(
             Q(dh_realizacao__lt=data_hora_fim) &
@@ -30,6 +30,9 @@ class Medico(models.Model):
     
     def __str__(self):
         return f"{self.profissional.nome}({self.crm})"
+    
+    class Meta:
+        db_table = 'medico'
 
 class Consulta(models.Model):
     dh_realizacao = models.DateTimeField(
@@ -57,6 +60,10 @@ class Consulta(models.Model):
         on_delete = models.DO_NOTHING
     )
 
+    finalizado = models.BooleanField(
+        default=False
+    )
+
     created_by = models.ForeignKey(
         Assistente,
         on_delete = models.DO_NOTHING
@@ -65,6 +72,8 @@ class Consulta(models.Model):
     def setNovoHorario(self, novo_horario):
         self.dh_realizacao = novo_horario
 
+    class Meta:
+        db_table = 'consulta'
 
 class Exame(models.Model):
     tipo = models.CharField(
@@ -73,6 +82,11 @@ class Exame(models.Model):
     
     dh_realizacao = models.DateTimeField(
         default = datetime.now()
+    )
+
+    medico = models.ForeignKey(
+        Medico,
+        on_delete = models.DO_NOTHING
     )
 
     paciente = models.ForeignKey(
@@ -84,6 +98,9 @@ class Exame(models.Model):
         Assistente,
         on_delete = models.DO_NOTHING
     )
+
+    class Meta:
+        db_table = 'exame'
 
 class Prontuario(models.Model):
     dh_criacao = models.DateTimeField(
@@ -99,6 +116,9 @@ class Prontuario(models.Model):
         Paciente,
         on_delete = models.DO_NOTHING
     )
+
+    class Meta:
+        db_table = 'prontuario'
 
 class Atestado(models.Model):
     dh_criacao = models.DateTimeField(
@@ -116,3 +136,6 @@ class Atestado(models.Model):
         Paciente,
         on_delete = models.DO_NOTHING
     )
+
+    class Meta:
+        db_table = 'atestado'

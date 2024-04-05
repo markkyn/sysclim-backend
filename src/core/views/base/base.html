@@ -36,6 +36,18 @@
                 <div id="navbar" class="navbar-collapse collapse">
                     <ul class="nav navbar-nav navbar-menu">
                         <li><a href="{% url 'index' %}">Início</a></li>
+                    {% if user.is_authenticated  and request.user.cargo == "assistente" %}
+                        <li><a href="{% url 'comum:cadastrar_sala' %}">Cadastrar Sala</a></li>
+                        <li><a href="{% url 'comum:cadastrar_especialidade' %}">Cadastrar Especialidade</a></li>
+                    {% endif %}
+                    </ul>
+                    <ul class="nav navbar>nav navbar-right">
+                        {% if user.is_authenticated %}
+                        <li style="color: aliceblue;">{{request.user.nome}} ( {{request.user.cargo|capfirst}} )</li>
+                        <li class="text-center"><a href="{% url 'logout' %}">Sair</a></li>
+                        {% else %}
+                        <li><a href="{% url 'login' %}">Entrar</a></li>
+                        {% endif %}
                     </ul>
                 </div>
             </div>

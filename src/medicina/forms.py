@@ -16,4 +16,4 @@ class CadastroConsultaForm(forms.ModelForm):
         self.fields['dh_realizacao'].input_formats = ('%Y-%m-%dT%H:%M',)
 
 class ReagendamentoConsultaForm(forms.Form):
-    novo_horario = forms.DateTimeField()
+    novo_horario = forms.DateTimeField(label="Novo Horario", widget=forms.DateTimeInput(attrs={'type': 'datetime-local'}))
