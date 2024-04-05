@@ -45,6 +45,13 @@ class Endereco(models.Model):
 
     )
 
+    def __str__(self):
+        return f"{self.rua}, {self.numero} - {self.bairro}, {self.cidade} - {self.estado} - {self.cep}"
+
+    #class Meta:
+        #db_table = 'endereco'
+
+
 # Profissionais
 class Especialidade(models.Model):
     tuss = models.CharField( # código unico de especialidade de saúde
@@ -57,6 +64,12 @@ class Especialidade(models.Model):
         max_length = 64,
         unique = True
     )
+
+    def __str__(self) -> str:
+        return f"{self.nome} ( TUSS: {self.tuss})"
+
+    #class Meta:
+        #db_table = 'especialidade'
 
 class Sala(models.Model):
     numero = models.IntegerField(
@@ -75,8 +88,8 @@ class Sala(models.Model):
         default = True,
     )
 
-class Assistente(models.Model):
-    nome = models.CharField(max_length = 64)
+    #class Meta:
+        #db_table = 'sala'
 
 class ProfissionalSaude(ModeloUsuario):
     cpf = models.CharField(
@@ -115,10 +128,13 @@ class ProfissionalSaude(ModeloUsuario):
         on_delete = models.CASCADE
     )
 
+    @property
+    def cpf_formatado(self):
+        return f"{self.cpf[0:3]}.{self.cpf[3:6]}.{self.cpf[6:9]}-{self.cpf[9:11]}"
+
     def identificador_cargo(self):
         if self.cargo == "assistente":
             return Assistente.objects.get(profissional = self).id
-
 
     class Meta(ModeloUsuario.Meta):
         db_table = 'profissional'
@@ -145,10 +161,18 @@ class Escala(models.Model):
 
     ativo = models.BooleanField(
         default = True
-    )  
+    )
+
+    #class Meta:
+        #db_table = 'escala'
 
 # Paciente
 class Paciente(models.Model):
+    GENERO_CHOICES = (
+        ('M', 'Masculino'),
+        ('F', 'Feminino'),
+    )
+
     nome = models.CharField(
         max_length = 64,
         unique = True,
@@ -161,7 +185,8 @@ class Paciente(models.Model):
     )
     
     genero = models.CharField(
-        max_length = 1,
+        max_length = 1, 
+        choices=GENERO_CHOICES
     )
 
     email = models.EmailField(
@@ -173,12 +198,18 @@ class Paciente(models.Model):
         blank = False
     )
 
-    created_by = models.ForeignKey(
-        Assistente,
+    endereco = models.ForeignKey(
+        Endereco,
         on_delete = models.DO_NOTHING,
-        default = None
+        default= None
     )
+
+    def __str__(self):
+        return f"{self.nome} ({self.cpf_formatado})"
 
     @property
     def cpf_formatado(self):
-        return f"{self.cpf[0:2]}.{self.cpf[3:5]}.{self.cpf[6:9]}-{self.cpf[10:11]}"
+        return f"{self.cpf[0:3]}.{self.cpf[3:6]}.{self.cpf[6:9]}-{self.cpf[9:11]}"
+
+    #class Meta:
+        #db_table = 'paciente'

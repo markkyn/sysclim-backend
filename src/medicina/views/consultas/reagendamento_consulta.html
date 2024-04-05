@@ -1,0 +1,12 @@
+
+{% block content%}
+<form class="form-signin" action="" method="post" id="login-form">
+    {{ form | crispy }}
+    {% csrf_token %}
+     <div class="d-flex">
+        <button class="btn btn-login btn-block" type="submit" name="reagendar">
+            <strong>Reagendar</strong>
+        </button>
+    </div>
+</form>
+{% endblock %}

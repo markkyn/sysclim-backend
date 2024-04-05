@@ -5,7 +5,6 @@ from django.db.models import Q
 
 from common.models import *
 
-
 class Medico(models.Model):
     crm = models.CharField(
         max_length = 12, 
@@ -60,6 +59,10 @@ class Consulta(models.Model):
         on_delete = models.DO_NOTHING
     )
 
+    def setNovoHorario(self, novo_horario):
+        self.dh_realizacao = novo_horario
+
+
 class Exame(models.Model):
     tipo = models.CharField(
         max_length = 64,
@@ -93,7 +96,6 @@ class Prontuario(models.Model):
         Paciente,
         on_delete = models.DO_NOTHING
     )
-
 
 class Atestado(models.Model):
     dh_criacao = models.DateTimeField(

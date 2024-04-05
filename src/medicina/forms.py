@@ -14,3 +14,6 @@ class CadastroConsultaForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super(CadastroConsultaForm, self).__init__(*args, **kwargs)
         self.fields['dh_realizacao'].input_formats = ('%Y-%m-%dT%H:%M',)
+
+class ReagendamentoConsultaForm(forms.Form):
+    novo_horario = forms.DateTimeField()

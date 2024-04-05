@@ -6,15 +6,15 @@
 {% block content%}
 <div class="row">
     <div class="col-md-9">
-        <h2 class="custom-page-title">Pacientes ({{pacientes_count}})</h2>
+        <h2 class="custom-page-title">Profissionais ({{profissionais_count}})</h2>
     </div>
         <div class="clearfix visible-xs-block visible-sm-block">
             <br>
         </div>
         {% if request.user.cargo == "assistente" %}
         <div class="col-md-3">
-            <a href="{% url 'comum:cadastrar_paciente' %}"
-               class="btn btn-primary btn-block">Cadastrar Paciente</a>
+            <a href="{% url 'comum:cadastrar_profissional' %}"
+               class="btn btn-primary btn-block">Cadastrar Profissional</a>
         </div>
         {%endif%}
 </div>
@@ -26,25 +26,27 @@
             <tr style="background-color: #00a2ff; color: whitesmoke;">
                 <th>Nome</th>
                 <th>CPF</th>
+                <th>Cargo</th>
                 <th>Genero</th>
                 <th>Email</th>
                 <th>Data de Nascimento</th>
-                <th>Cadastrado Por</th>
+                <th>Endereco</th>
             </tr>
         </thead>
         <tbody class="exames_body">
-            {% for paciente in pacientes %}
+            {% for profissional in profissionais %}
                 <tr>
-                    <td class="text-center">{{paciente.nome}}</td>
-                    <td>{{paciente.cpf_formatado}}</td>
-                    <td>{{paciente.genero}}</td>
-                    <td>{{paciente.email}}</td>
-                    <td>{{paciente.dt_nascimento}}</td>
-                    <td>{{paciente.created_by.nome}} (Assistente)</td>
+                    <td>{{profissional.nome}}</td>
+                    <td>{{profissional.cpf_formatado}}</td>
+                    <td>{{profissional.genero}}</td>
+                    <td>{{profissional.cargo}}</td>
+                    <td>{{profissional.email}}</td>
+                    <td>{{profissional.dt_nascimento}}</td>
+                    <td>{{profissional.endereco}}</td>
                 </tr>
             {% empty %}
                 <tr>
-                    <td colspan="8" class="text-center">Nenhum Paciente cadastrado</td>
+                    <td colspan="8" class="text-center">Nenhum Profissional cadastrado</td>
                 </tr>
             {% endfor %}
         </tbody>

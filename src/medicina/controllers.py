@@ -5,9 +5,9 @@ from django.contrib.auth.decorators import login_required
 from medicina.models import Medico , Consulta
 from common.models import Paciente, Assistente, Sala
 
-from .forms import CadastroConsultaForm
+from .forms import CadastroConsultaForm, ReagendamentoConsultaForm
 
-@login_required
+@login_required(login_url="/login/")
 def listar_consultas(request):
     consultas = Consulta.objects.all()
 
@@ -15,7 +15,7 @@ def listar_consultas(request):
 
     return render(request, "listar_consultas.html", locals())
 
-@login_required
+@login_required(login_url="/login/")
 def agendar_consulta(request):
     if request.method == 'POST':
         form = CadastroConsultaForm(request.POST)
@@ -47,4 +47,34 @@ def agendar_consulta(request):
         form = CadastroConsultaForm()
 
     return render(request, "nova_consulta.html", locals())
+
+@login_required(login_url="/login/")
+def cancelar_consulta(request, id):
+    consulta = Consulta.objects.get(id = id).delete()
+
+    return redirect("index")
+
+@login_required(login_url="/login/")
+def reagendar_consulta(request, id):
+    if request.method == 'POST':
+        form = ReagendamentoConsultaForm()
+
+        if form.is_valid():
+            consulta_antiga = Consulta.objects.get(id = id)
+            novo_horario = form.cleaned_data["novo_horario"]
+
+            if consulta_antiga.medico.verificar_disponibilidade(novo_horario):
+                # Disponivel
+                consulta_antiga.setNovoHorario(novo_horario)
+
+            else:
+                # Indisponivel
+                # Mensagem de Erro
+                pass
+
+    else:
+        form = ReagendamentoConsultaForm()
+    
+    return render(request, "consultas/reagendamento_consulta.html")
+
 
