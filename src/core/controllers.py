@@ -29,5 +29,6 @@ def index(request):
     pacientes_count = Paciente.objects.all().count()
     exames_count = Exame.objects.all().count()
     profissional_count = ProfissionalSaude.objects.all().count()
+    salas_count = Sala.objects.all().count()
 
     return render(request, "base/index.html", locals())

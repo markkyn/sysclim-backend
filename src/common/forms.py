@@ -47,6 +47,7 @@ class CadastroProfissionalForm(forms.Form):
     genero = forms.ChoiceField(label="Genero",choices=GENERO_CHOICES)
     email = forms.EmailField(label="Email")
     cargo = forms.ChoiceField(label="Cargo",choices=CARGO_CHOICES)
+    codigo_cargo = forms.CharField(label="Código do Cargo")
     especialidade = forms.ModelChoiceField(label="Especialidade",queryset=Especialidade.objects.all())
     dt_nascimento = forms.DateField(
         label="Data de Nascimento", 
@@ -66,3 +67,7 @@ class CadastroProfissionalForm(forms.Form):
     estado = forms.CharField(label="Estado (Sigla)", max_length=2)
     cidade = forms.CharField(label="Cidade", max_length=24)
     cep = forms.CharField(label="CEP", max_length=8, min_length=8)
+
+class CadastroSalaForm(forms.Form):
+    numero = forms.IntegerField(label="Número")
+    especialidade = forms.ModelChoiceField(label="Especialidade",queryset=Especialidade.objects.all())

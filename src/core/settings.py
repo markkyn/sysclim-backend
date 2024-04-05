@@ -74,7 +74,8 @@ TEMPLATES = [
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [
             "core/views",
-            "medicina/views"
+            "medicina/views",
+            "common/views",
         ],
         'APP_DIRS': True,
         'OPTIONS': {

@@ -27,6 +27,9 @@ class Medico(models.Model):
         ).exists()
 
         return not consultas_no_periodo
+    
+    def __str__(self):
+        return f"{self.profissional.nome}({self.crm})"
 
 class Consulta(models.Model):
     dh_realizacao = models.DateTimeField(

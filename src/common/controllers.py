@@ -1,7 +1,9 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 
-from common.models import Paciente, Assistente, Endereco, ProfissionalSaude
+from common.models import Paciente, Assistente, Endereco, ProfissionalSaude, Sala
+from medicina.models import Especialidade, Medico
+from enfermagem.models import Enfermeiro
 from common.forms import *
 
 # PACIENTES
@@ -60,8 +62,8 @@ def cadastrar_paciente(request):
 
     return render(request, "pacientes/cadastrar_paciente.html", {'form': form})
 
-
 # PROFISSIONAIS
+@login_required(login_url="/login/")
 def listar_profissionais(request):
     profissionais = ProfissionalSaude.objects.all()
 
@@ -69,6 +71,7 @@ def listar_profissionais(request):
 
     return render(request, "profissionais/listar_profissionais.html", locals())
 
+@login_required(login_url="/login/")
 def cadastrar_profissional(request):
     if request.method == 'POST':
         form = CadastroProfissionalForm(request.POST)
@@ -104,8 +107,18 @@ def cadastrar_profissional(request):
                     dt_nascimento = form.cleaned_data["dt_nascimento"],
                     cargo = form.cleaned_data["cargo"],
                     especialidade = form.cleaned_data["especialidade"],
-                    created_by = Assistente.objects.get(id = request.user.identificador_cargo())
                 )
+
+                if form.cleaned_data["cargo"] == "médico":
+                    Medico.objects.create(
+                        crm = form.cleaned_data["codigo_cargo"],
+                    )
+                elif form.cleaned_data["cargo"] == "enfermeiro":
+                    Enfermeiro.objects.create(
+                        coren = form.cleaned_data["codigo_cargo"],
+                    )   
+
+                return redirect("comum:listar_profissionais")
             except Exception as e:
                 endereco.delete()
                 form.add_error(None, f"{str(e)}")
@@ -114,3 +127,31 @@ def cadastrar_profissional(request):
         form = CadastroProfissionalForm()
 
     return render(request, "profissionais/cadastrar_profissional.html", {'form': form})
+
+# DEPENDENCIAS
+@login_required(login_url="/login/")
+def listar_salas(request):
+    salas = Sala.objects.all()
+    salas_count = salas.count()
+
+    return render(request, "dependencias/listar_salas.html", locals())
+
+@login_required(login_url="/login/")
+def cadastrar_sala(request):
+    if request.method == 'POST':
+        form = CadastroSalaForm(request.POST)
+        if form.is_valid():
+            try:
+                sala = Sala.objects.create(
+                    numero = form.cleaned_data["numero"],
+                    especialidade = form.cleaned_data["especialidade"],
+                )
+
+                return redirect("comum:listar_salas")
+            except Exception as e:
+                form.add_error(None, f"{str(e)}")
+                return render(request, "dependencias/cadastrar_sala.html", {'form': form})
+    else:
+        form = CadastroSalaForm()
+
+    return render(request, "dependencias/cadastrar_sala.html", {'form': form})

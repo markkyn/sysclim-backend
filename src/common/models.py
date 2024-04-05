@@ -1,4 +1,7 @@
 from django.db import models
+from django.db.models import Q
+from django.apps import apps
+from datetime import datetime
 
 from autenticacao.models import *
 
@@ -84,9 +87,26 @@ class Sala(models.Model):
         on_delete = models.SET_NULL
     )
 
-    disponivel = models.BooleanField(
-        default = True,
+    ativo = models.BooleanField(
+        default=True,
+        null = False
     )
+    
+    def verificar_disponibilidade(self, data_hora_inicio, duracao=1):
+        Consulta = apps.get_model('common', 'Consulta')
+        
+        data_hora_fim = data_hora_inicio + datetime.timedelta(hours=duracao)
+
+        consultas_no_periodo = Consulta.objects.filter(
+            Q(dh_realizacao__lt=data_hora_fim) &
+            Q(dh_realizacao__gte=data_hora_inicio),
+            medico=self
+        ).exists()
+
+        return not consultas_no_periodo
+
+    def __str__(self):
+        return f"Sala {self.numero}"
 
     #class Meta:
         #db_table = 'sala'
