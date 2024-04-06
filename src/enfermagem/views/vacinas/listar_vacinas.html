@@ -1,22 +1,21 @@
 {% extends "base/base.html" %}
 {% load crispy_forms_tags %}
-{% block title %}Listar Consultas{%endblock%}
+{% block title %}Listar Vacinas{%endblock%}
 
 
 {% block content%}
 <div class="row">
     <div class="col-md-9">
-        <h2 class="custom-page-title">Profissionais ({{profissionais_count}})</h2>
+        <h2 class="custom-page-title">Vacinas ({{vacinas_count}})</h2>
     </div>
-        <div class="clearfix visible-xs-block visible-sm-block">
-            <br>
-        </div>
-        {% if request.user.cargo == "assistente" %}
-        <div class="col-md-3">
-            <a href="{% url 'comum:cadastrar_profissional' %}"
-               class="btn btn-primary btn-block">Cadastrar Profissional</a>
-        </div>
-        {%endif%}
+    <div class="clearfix visible-xs-block visible-sm-block">
+        <br>
+    </div>
+    {% if request.user.cargo == "assistente" %}
+    <div class="col-md-3">
+        <a href="{% url 'enfermagem:cadastrar_vacina' %}" class="btn btn-primary btn-block">Cadastrar Vacina</a>
+    </div>
+    {%endif%}
 </div>
 <div class="underline"></div>
 
@@ -26,29 +25,37 @@
             <tr style="background-color: #00a2ff; color: whitesmoke;">
                 <th>Nome</th>
                 <th>Lote</th>
-                <th>Cargo</th>
-                <th>Genero</th>
-                <th>Email</th>
-                <th>Data de Nascimento</th>
-                <th>Endereco</th>
+                <th>Data de Cadastro</th>
+                <th>Descricao</th>
+                <th>Status</th>
+                <th>Paciente</th>
+                <th>Enfermeiro</th>
             </tr>
         </thead>
         <tbody class="exames_body">
             {% for vacina in vacinas %}
-                <tr>
-                    <td>{{vacina.nome}}</td>
-                    <td>{{vacina.lote}}</td>
-                    <td>{{vacina.genero}}</td>
-                    <td>{{vacina.cargo| capfirst}}</td>
-                    <td>{{vacina.email}}</td>
-                    <td>{{vacina.dt_nascimento}}</td>
-                    <td>{{vacina.endereco}}</td>
-                </tr>
+            <tr>
+                <td>{{vacina.nome}}</td>
+                <td>{{vacina.lote}}</td>
+                <td>{{vacina.dt_cadastro|date:"d/m/Y"}}</td>
+                <td>{{vacina.descricao}}</td>
+                <td>{{vacina.status}}</td>
+                {%if vacina.status %}
+                <td>{{vacina.paciente.nome}}</td>
+                {%else%}
+                <td>Não aplicada</td>
+                {%endif%}
+                {%if vacina.status %}
+                <td>{{vacina.enfermeiro.nome}}</td>
+                {%else%}
+                <td>Não aplicada</td>
+                {%endif%}
+            </tr>
             {% empty %}
-                <tr>
-                    <td colspan="8" class="text-center">Nenhum Profissional cadastrado</td>
-                </tr>
+            <tr>
+                <td colspan="8" class="text-center">Nenhuma Vacina cadastrada</td>
+            </tr>
             {% endfor %}
         </tbody>
     </table>
-{% endblock %}
+    {% endblock %}

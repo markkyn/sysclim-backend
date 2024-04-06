@@ -1,11 +1,12 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
+from datetime import datetime
 
 
-from medicina.models import Medico , Consulta
+from medicina.models import Medico , Consulta, Atestado
 from common.models import Paciente, Assistente, Sala
 
-from .forms import CadastroConsultaForm, ReagendamentoConsultaForm
+from .forms import CadastroConsultaForm, ReagendamentoConsultaForm, EmitirAtestadoForm
 
 @login_required(login_url="/login/")
 def listar_consultas(request):
@@ -13,7 +14,7 @@ def listar_consultas(request):
 
     consultas_count = consultas.count()
 
-    return render(request, "listar_consultas.html", locals())
+    return render(request, "consultas/listar_consultas.html", locals())
 
 @login_required(login_url="/login/")
 def agendar_consulta(request):
@@ -45,7 +46,7 @@ def agendar_consulta(request):
     else:
         form = CadastroConsultaForm()
 
-    return render(request, "nova_consulta.html", locals())
+    return render(request, "consultas/nova_consulta.html", locals())
 
 @login_required(login_url="/login/")
 def cancelar_consulta(request, id):
@@ -68,12 +69,35 @@ def reagendar_consulta(request,id):
 def realizar_consulta(request, id):
     consulta = Consulta.objects.get(id = id)
 
-    return render(request, "consultas/executar_consulta.html", locals())
+    return render(request, "consultas/realizar_consulta.html", locals())
 
 @login_required(login_url="/login/")
 def finalizar_consulta(request, id):
     consulta = Consulta.objects.get(id = id)
-    consulta.finalizado = True
+    consulta.status = 'realizada'
     consulta.save()
 
     return redirect("index")
+
+@login_required(login_url="/login/")
+def emitir_atestado(request, id):
+    consulta = Consulta.objects.get(id = id)
+    
+    if request.method == 'POST':
+        form = EmitirAtestadoForm(request.POST)
+    
+        if form.is_valid():
+            
+            Atestado.objects.create(
+                medico = consulta.medico,
+                paciente = consulta.paciente,
+                informacoes = form.cleaned_data['informacoes'],
+                dh_criacao = datetime.now(),
+            )
+
+            redirect("realizar_consulta", id=id)
+
+    else:
+        form = EmitirAtestadoForm()
+
+    return render(request, "atestados/novo_atestado.html", locals())

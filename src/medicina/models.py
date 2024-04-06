@@ -35,6 +35,15 @@ class Medico(models.Model):
         db_table = 'medico'
 
 class Consulta(models.Model):
+    STATUS_CHOICES =(
+        ('agendada', 'Agendada'),
+        ('realizada', 'Realizada'),
+        ('cancelada', 'Cancelada'),
+        ('perdida', 'Perdida'),
+    )
+
+
+
     dh_realizacao = models.DateTimeField(
         "Data e Hora de Realização",
         default = datetime.now()
@@ -60,8 +69,12 @@ class Consulta(models.Model):
         on_delete = models.DO_NOTHING
     )
 
-    finalizado = models.BooleanField(
-        default=False
+    status = models.CharField(
+        max_length=50,
+        blank = False,
+        null  = False,
+        choices = STATUS_CHOICES,
+        default = 'agendada'
     )
 
     created_by = models.ForeignKey(

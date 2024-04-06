@@ -19,8 +19,6 @@ class Enfermeiro(models.Model):
     class Meta:
         db_table = 'enfermeiro'
 
-
-
 class Vacina(models.Model):
     nome = models.CharField(
         max_length = 64,
@@ -38,6 +36,14 @@ class Vacina(models.Model):
         null = True
     )
 
+    dt_fabricacao = models.DateField(
+        null = False
+    )
+
+    dt_validade = models.DateField(
+        null = False
+    )
+
     descricao = models.TextField()
 
     paciente = models.ForeignKey(
@@ -53,6 +59,10 @@ class Vacina(models.Model):
         blank = False,
         on_delete=models.DO_NOTHING
     )
+
+    @property
+    def status(self):
+        return "Aplicada" if self.paciente else "Não aplicada"
 
     class Meta:
         db_table = 'vacina'

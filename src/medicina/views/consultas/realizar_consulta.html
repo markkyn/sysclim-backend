@@ -1,0 +1,141 @@
+{% extends "base/base.html" %}
+{% load crispy_forms_tags %}
+{% block title %}Realizar Consulta{%endblock%}
+
+
+{% block content%}
+<div class="row">
+    <div class="col-md-6">
+        <h2 class="custom-page-title">Consulta: {{consulta.id}}</h2>
+    </div>
+    {% if consulta.status != "realizada" %}
+    <div class="col-md-3">
+        <a href="{% url 'medicina:finalizar_consulta' consulta.id %}" class="btn btn-primary btn-block">
+            Finalizar Consulta
+        </a>
+    </div>
+    <div class="col-md-3">
+        <a href="{% url 'medicina:emitir_atestado' consulta.id %}" class="btn btn-primary btn-block">
+            Emitir Atestado
+        </a>
+    </div>
+    {% endif %}
+</div>
+<div class="underline"></div>
+<!-- Dados do Paciente -->
+<div class="panel-group" id="accordion2" role="tablist" aria-multiselectable="true">
+    <div class="panel panel-primary">
+        <div class="panel-heading" role="tab" id="headingTwo">
+            <h4 class="panel-title">
+                Dados do Paciente
+            </h4>
+        </div>
+        <div id="collapseTwo" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingTwo">
+            <div class="panel-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <p><strong>Nome:</strong></p>
+                        <div class="box">
+                            <p>
+                                {{ consulta.paciente.nome }}
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <p><strong>CPF:</strong></p>
+                        <div class="box">
+                            <p>
+                                {% if consulta.paciente.cpf %}
+                                {{ consulta.paciente.cpf_formatado }}
+                                {% else %}
+                                Não informado
+                                {% endif %}
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <p><strong>Data de Nascimento:</strong></p>
+                        <div class="box">
+                            <p>{{ consulta.paciente.dt_nascimento|date:"d/m/Y" }} (<strong>{{ consulta.paciente.getIdade}}
+                                    anos</strong>)</p>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <p><strong>Sexo:</strong></p>
+                        <div class="box">
+                            <p>
+                                {% if consulta.paciente.genero == 'M' %}
+                                Masculino
+                                {% else %}
+                                Feminino
+                                {% endif %}
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <p><strong>Município:</strong></p>
+                        <div class="box">
+                            <p>
+                                {{ consulta.paciente.endereco }}
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Dados da Consulta -->
+<div class="panel-group" id="accordion2" role="tablist" aria-multiselectable="true">
+    <div class="panel panel-primary">
+        <div class="panel-heading" role="tab" id="headingTwo">
+            <h4 class="panel-title">
+                Dados da Consulta
+            </h4>
+        </div>
+        <div id="collapseTwo" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingTwo">
+            <div class="panel-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <p><strong>Data e Hora da Realização:</strong></p>
+                        <div class="box">
+                            <p>
+                                {{ consulta.dh_realizacao|date:"d/m/Y H:i" }}
+                            </p>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <p><strong>Status:</strong></p>
+                        <div class="box">
+                            <p>
+                                {{ consulta.status | capfirst }}
+                            </p>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <p><strong>Sala da Realização:</strong></p>
+                        <div class="box">
+                            <p>
+                                {{ consulta.sala }}
+                            </p>
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <p><strong>Objetivo da Consulta:</strong></p>
+                        <div class="box">
+                            <p>
+                                {{ consulta.objetivo}}
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

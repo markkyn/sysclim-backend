@@ -229,5 +229,9 @@ class Paciente(models.Model):
     def cpf_formatado(self):
         return f"{self.cpf[0:3]}.{self.cpf[3:6]}.{self.cpf[6:9]}-{self.cpf[9:11]}"
 
+    @property
+    def getIdade(self):
+        return datetime.now().year - self.dt_nascimento.year
+
     class Meta:
         db_table = 'paciente'

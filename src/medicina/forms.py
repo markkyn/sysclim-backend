@@ -17,3 +17,6 @@ class CadastroConsultaForm(forms.ModelForm):
 
 class ReagendamentoConsultaForm(forms.Form):
     novo_horario = forms.DateTimeField(label="Novo Horario", widget=forms.DateTimeInput(attrs={'type': 'datetime-local'}))
+
+class EmitirAtestadoForm(forms.Form):
+    informacoes = forms.CharField(widget=forms.Textarea(attrs={'rows': 4, 'cols': 40}))

@@ -76,6 +76,7 @@ TEMPLATES = [
             "core/views",
             "medicina/views",
             "common/views",
+            "enfermagem/views",
         ],
         'APP_DIRS': True,
         'OPTIONS': {
