@@ -15,9 +15,11 @@
         </a>
     </div>
     <div class="col-md-3">
+        {% if request.user.cargo == "médico" %}
         <a href="{% url 'medicina:emitir_atestado' consulta.id %}" class="btn btn-primary btn-block">
             Emitir Atestado
         </a>
+        {% endif %}	
     </div>
     {% endif %}
 </div>
