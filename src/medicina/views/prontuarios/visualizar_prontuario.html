@@ -6,20 +6,8 @@
 {% block content%}
 <div class="row">
     <div class="col-md-6">
-        <h2 class="custom-page-title">Consulta: {{id}}</h2>
+        <h2 class="custom-page-title">Prontuário:</h2>
     </div>
-    {% if status != "realizada" %}
-    <div class="col-md-3">
-        <a href="#" class="btn btn-primary btn-block">
-            Finalizar Consulta
-        </a>
-    </div>
-    <div class="col-md-3">
-        <a href="#" class="btn btn-primary btn-block">
-            Emitir Atestado
-        </a>
-    </div>
-    {% endif %}
 </div>
 <div class="underline"></div>
 <!-- Dados do Paciente -->
