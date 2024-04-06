@@ -11,4 +11,6 @@ urlpatterns = [
     path("finalizar_consulta/<int:id>", finalizar_consulta, name="finalizar_consulta"),
 
     path("emitir_atestado/<int:id>", emitir_atestado, name="emitir_atestado"),
+
+    path("visualizar_prontuario/<str:paciente_cpf>", visualizar_prontuario, name="visualizar_prontuario"),
 ]

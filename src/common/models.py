@@ -146,8 +146,16 @@ class ProfissionalSaude(ModeloUsuario):
         return f"{self.cpf[0:3]}.{self.cpf[3:6]}.{self.cpf[6:9]}-{self.cpf[9:11]}"
 
     def identificador_cargo(self):
+        Enfermeiro = apps.get_model('enfermagem', 'Enfermeiro')
+        Medico = apps.get_model('medicina', 'Medico')
+
         if self.cargo == "assistente":
             return Assistente.objects.get(profissional = self).id
+        elif self.cargo == "enfermeiro":
+            return Enfermeiro.objects.get(profissional = self).coren
+        elif self.cargo == "medico":
+            return Medico.objects.get(profissional = self).crm
+        
 
     class Meta(ModeloUsuario.Meta):
         db_table = 'profissional'

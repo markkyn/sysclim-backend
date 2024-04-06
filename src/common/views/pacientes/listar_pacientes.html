@@ -8,15 +8,14 @@
     <div class="col-md-9">
         <h2 class="custom-page-title">Pacientes ({{pacientes_count}})</h2>
     </div>
-        <div class="clearfix visible-xs-block visible-sm-block">
-            <br>
-        </div>
-        {% if request.user.cargo == "assistente" %}
-        <div class="col-md-3">
-            <a href="{% url 'comum:cadastrar_paciente' %}"
-               class="btn btn-primary btn-block">Cadastrar Paciente</a>
-        </div>
-        {%endif%}
+    <div class="clearfix visible-xs-block visible-sm-block">
+        <br>
+    </div>
+    {% if request.user.cargo == "assistente" %}
+    <div class="col-md-3">
+        <a href="{% url 'comum:cadastrar_paciente' %}" class="btn btn-primary btn-block">Cadastrar Paciente</a>
+    </div>
+    {%endif%}
 </div>
 <div class="underline"></div>
 
@@ -30,23 +29,36 @@
                 <th>Email</th>
                 <th>Data de Nascimento</th>
                 <th>Cadastrado Por</th>
+                <th>Ações</th>
             </tr>
         </thead>
         <tbody class="exames_body">
             {% for paciente in pacientes %}
-                <tr>
-                    <td class="text-center">{{paciente.nome}}</td>
-                    <td>{{paciente.cpf_formatado}}</td>
-                    <td>{{paciente.genero}}</td>
-                    <td>{{paciente.email}}</td>
-                    <td>{{paciente.dt_nascimento}}</td>
-                    <td>{{paciente.created_by.nome}} (Assistente)</td>
-                </tr>
+            <tr>
+                <td class="text-center">{{paciente.nome}}</td>
+                <td>{{paciente.cpf_formatado}}</td>
+                <td>{{paciente.genero}}</td>
+                <td>{{paciente.email}}</td>
+                <td>{{paciente.dt_nascimento}}</td>
+                <td>{{paciente.created_by.nome}} (Assistente)</td>
+                <td>
+                    <a href="{% url 'medicina:visualizar_prontuario' paciente.cpf %}" type="button"
+                        class="btn btn-primary btn-sm file-viewer-action">
+                        Visualizar Prontuario
+                    </a>
+                    {% if request.user.cargo == "enfermeiro" %}
+                    <a href="{% url 'enfermagem:aplicar_vacina' paciente.cpf %}" type="button"
+                        class="btn btn-primary btn-sm file-viewer-action">
+                        Aplicar Vacina
+                    </a>
+                    {%endif%}
+                </td>
+            </tr>
             {% empty %}
-                <tr>
-                    <td colspan="8" class="text-center">Nenhum Paciente cadastrado</td>
-                </tr>
+            <tr>
+                <td colspan="8" class="text-center">Nenhum Paciente cadastrado</td>
+            </tr>
             {% endfor %}
         </tbody>
     </table>
-{% endblock %}
+    {% endblock %}

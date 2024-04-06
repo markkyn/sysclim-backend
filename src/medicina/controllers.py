@@ -3,7 +3,7 @@ from django.contrib.auth.decorators import login_required
 from datetime import datetime
 
 
-from medicina.models import Medico , Consulta, Atestado
+from medicina.models import Medico , Consulta, Atestado, Prontuario
 from common.models import Paciente, Assistente, Sala
 
 from .forms import CadastroConsultaForm, ReagendamentoConsultaForm, EmitirAtestadoForm
@@ -50,9 +50,11 @@ def agendar_consulta(request):
 
 @login_required(login_url="/login/")
 def cancelar_consulta(request, id):
-    consulta = Consulta.objects.get(id = id).delete()
+    consulta = Consulta.objects.get(id = id)
+    consulta.status = 'cancelada'
+    consulta.save()
 
-    return redirect("index")
+    return redirect("medicina:listar_consultas")
 
 @login_required(login_url="/login/")
 def reagendar_consulta(request,id):
@@ -95,9 +97,27 @@ def emitir_atestado(request, id):
                 dh_criacao = datetime.now(),
             )
 
-            redirect("realizar_consulta", id=id)
+            redirect("medicina:realizar_consulta", id=id)
 
     else:
         form = EmitirAtestadoForm()
 
     return render(request, "atestados/novo_atestado.html", locals())
+
+# PRONTUARIO
+@login_required(login_url="/login/")
+def visualizar_prontuario(request, paciente_cpf):
+    paciente = Paciente.objects.get(cpf=paciente_cpf)
+
+    try:
+        prontuario = Prontuario.objects.get(paciente=paciente)
+
+    except Prontuario.DoesNotExist:
+        prontuario = Prontuario.objects.create(
+            paciente=paciente,
+        )
+
+    atestados = prontuario.getAtestados()
+    vacinas = prontuario.getVacinasAplicadas()
+
+    return render(request, "prontuarios/visualizar_prontuario.html", locals())

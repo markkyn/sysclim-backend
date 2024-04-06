@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, date
 
 from django.db import models
 
@@ -15,6 +15,10 @@ class Enfermeiro(models.Model):
         ProfissionalSaude,
         on_delete = models.CASCADE
     )
+
+    def __str__(self) -> str:
+        return f"{self.profissional.nome} - COREN: {self.coren}"
+
 
     class Meta:
         db_table = 'enfermeiro'
@@ -44,6 +48,10 @@ class Vacina(models.Model):
         null = False
     )
 
+    dh_aplicacao = models.DateTimeField(
+        null = True
+    )
+
     descricao = models.TextField()
 
     paciente = models.ForeignKey(
@@ -60,9 +68,21 @@ class Vacina(models.Model):
         on_delete=models.DO_NOTHING
     )
 
+    def filtrarAplicaveis():
+        return Vacina.objects.filter(
+            paciente = None, 
+            dt_validade__gte = datetime.now()
+        )
+
     @property
     def status(self):
+        if self.dt_validade < date.today() and not self.paciente:
+            return "Vencida"
+
         return "Aplicada" if self.paciente else "Não aplicada"
+
+    def __str__(self):
+        return f"{self.nome} - {self.lote}"
 
     class Meta:
         db_table = 'vacina'

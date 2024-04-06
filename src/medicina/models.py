@@ -4,6 +4,7 @@ from django.db import models
 from django.db.models import Q
 
 from common.models import *
+from enfermagem.models import Vacina
 
 class Medico(models.Model):
     crm = models.CharField(
@@ -120,15 +121,16 @@ class Prontuario(models.Model):
         default = datetime.now()
     )
 
-    medico = models.ForeignKey(
-        Medico,
-        on_delete = models.DO_NOTHING
-    )
-
     paciente = models.ForeignKey(
         Paciente,
         on_delete = models.DO_NOTHING
     )
+
+    def getAtestados(self):
+        return Atestado.objects.filter(paciente=self.paciente)
+
+    def getVacinasAplicadas(self):
+        return Vacina.objects.filter(paciente=self.paciente)
 
     class Meta:
         db_table = 'prontuario'

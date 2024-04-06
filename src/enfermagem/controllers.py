@@ -1,9 +1,10 @@
+from datetime import datetime
+
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 
-from enfermagem.models import Vacina
-
-from enfermagem.forms import CadastroVacinaForm
+from enfermagem.models import Vacina, Paciente, Enfermeiro
+from enfermagem.forms import CadastroVacinaForm, AplicarVacinaForm
 
 
 @login_required(login_url="/login/")
@@ -20,13 +21,13 @@ def cadastrar_vacina(request):
             vacina = Vacina.objects.create(
                 nome=nome,
                 descricao=descricao,
-                data_fabricacao=data_fabricacao,
-                data_validade=data_validade,
+                dt_fabricacao=data_fabricacao,
+                dt_validade=data_validade,
                 paciente = None,
                 enfermeiro = None
             )
             
-            return redirect("enfermeiro:listar_vacinas")
+            return redirect("enfermagem:listar_vacinas")
 
         else:
             form.add_error(None, "Erro ao cadastrar vacina.")
@@ -43,3 +44,25 @@ def listar_vacinas(request):
     vacinas_count = vacinas.count()
 
     return render(request, "vacinas/listar_vacinas.html", locals())
+
+@login_required(login_url="/login/")
+def aplicar_vacina(request, paciente_cpf):
+    
+    if request.method == "POST":
+        form = AplicarVacinaForm(request.POST)
+
+        if form.is_valid():
+            vacina = Vacina.objects.get(id=form.cleaned_data.get("vacina"))
+            enfermeiro = Enfermeiro.objects.get(coren=request.user.identificador_cargo())
+            paciente = Paciente.objects.get(cpf=paciente_cpf)
+
+            vacina.paciente = paciente
+            vacina.enfermeiro = enfermeiro
+            vacina.dh_aplicacao = datetime.now()
+            vacina.save()
+
+            return redirect("enfermagem:listar_vacinas")
+    else:
+        form = AplicarVacinaForm()
+
+    return render(request, "vacinas/aplicar_vacina.html", locals())

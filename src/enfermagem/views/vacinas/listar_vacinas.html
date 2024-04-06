@@ -26,6 +26,8 @@
                 <th>Nome</th>
                 <th>Lote</th>
                 <th>Data de Cadastro</th>
+                <th>Data de Fabricação</th>
+                <th>Data de Validade</th>
                 <th>Descricao</th>
                 <th>Status</th>
                 <th>Paciente</th>
@@ -38,17 +40,19 @@
                 <td>{{vacina.nome}}</td>
                 <td>{{vacina.lote}}</td>
                 <td>{{vacina.dt_cadastro|date:"d/m/Y"}}</td>
+                <td>{{vacina.dt_fabricacao|date:"d/m/Y"}}</td>
+                <td>{{vacina.dt_validade|date:"d/m/Y"}}</td>
                 <td>{{vacina.descricao}}</td>
                 <td>{{vacina.status}}</td>
-                {%if vacina.status %}
-                <td>{{vacina.paciente.nome}}</td>
+                {%if vacina.status != "Não aplicada" %}
+                    <td>{{vacina.paciente.nome}}</td>
                 {%else%}
-                <td>Não aplicada</td>
+                    <td>-</td>
                 {%endif%}
-                {%if vacina.status %}
-                <td>{{vacina.enfermeiro.nome}}</td>
+                {%if vacina.status != "Não aplicada"  %}
+                    <td>{{vacina.enfermeiro.nome}}</td>
                 {%else%}
-                <td>Não aplicada</td>
+                    <td>-</td>
                 {%endif%}
             </tr>
             {% empty %}

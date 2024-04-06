@@ -1,0 +1,207 @@
+{% extends "base/base.html" %}
+{% load crispy_forms_tags %}
+{% block title %}Realizar Consulta{%endblock%}
+
+
+{% block content%}
+<div class="row">
+    <div class="col-md-6">
+        <h2 class="custom-page-title">Consulta: {{id}}</h2>
+    </div>
+    {% if status != "realizada" %}
+    <div class="col-md-3">
+        <a href="#" class="btn btn-primary btn-block">
+            Finalizar Consulta
+        </a>
+    </div>
+    <div class="col-md-3">
+        <a href="#" class="btn btn-primary btn-block">
+            Emitir Atestado
+        </a>
+    </div>
+    {% endif %}
+</div>
+<div class="underline"></div>
+<!-- Dados do Paciente -->
+<div class="panel-group" id="accordion2" role="tablist" aria-multiselectable="true">
+    <div class="panel panel-primary">
+        <div class="panel-heading" role="tab" id="headingTwo">
+            <h4 class="panel-title">
+                Dados do Paciente
+            </h4>
+        </div>
+        <div id="collapseTwo" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingTwo">
+            <div class="panel-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <p><strong>Nome:</strong></p>
+                        <div class="box">
+                            <p>
+                                {{ paciente.nome }}
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <p><strong>CPF:</strong></p>
+                        <div class="box">
+                            <p>
+                                {% if paciente.cpf %}
+                                {{ paciente.cpf_formatado }}
+                                {% else %}
+                                Não informado
+                                {% endif %}
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <p><strong>Data de Nascimento:</strong></p>
+                        <div class="box">
+                            <p>{{ paciente.dt_nascimento|date:"d/m/Y" }} (<strong>{{ paciente.getIdade}}
+                                    anos</strong>)</p>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <p><strong>Sexo:</strong></p>
+                        <div class="box">
+                            <p>
+                                {% if paciente.genero == 'M' %}
+                                Masculino
+                                {% else %}
+                                Feminino
+                                {% endif %}
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <p><strong>Município:</strong></p>
+                        <div class="box">
+                            <p>
+                                {{ paciente.endereco }}
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Atestados Emitidos -->
+<div class="panel-group" id="accordion2" role="tablist" aria-multiselectable="true">
+    <div class="panel panel-primary">
+        <div class="panel-heading" role="tab" id="headingTwo">
+            <h4 class="panel-title">
+                Atestados Emitidos
+            </h4>
+        </div>
+        <div id="collapseTwo" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingTwo">
+            <div class="panel-body">
+                {% for atestado in atestados %}
+                <div class="row">
+                    <div class="col-md-6">
+                        <p><strong>Data e Hora de Cadastro:</strong></p>
+                        <div class="box">
+                            <p>
+                                {{ atestado.dh_criacao|date:"d/m/Y H:i" }}
+                            </p>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <p><strong>Medico Emissor:</strong></p>
+                        <div class="box">
+                            <p>
+                                {{ atestado.medico | capfirst }}
+                            </p>
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <p><strong>Informações:</strong></p>
+                        <div class="box">
+                            <p>
+                                {{ atestado.informacoes }}
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="underline"></div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Vacinas Aplicadas -->
+<div class="panel-group" id="accordion2" role="tablist" aria-multiselectable="true">
+    <div class="panel panel-primary">
+        <div class="panel-heading" role="tab" id="headingTwo">
+            <h4 class="panel-title">
+                Vacinas Aplicadas
+            </h4>
+        </div>
+        <div id="collapseTwo" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingTwo">
+            <div class="panel-body">
+                {% for vacina in vacinas %}
+                <div class="row">
+                    <div class="col-md-6">
+                        <p><strong>Nome da Vacina:</strong></p>
+                        <div class="box">
+                            <p>
+                                {{ vacina.nome }}
+                            </p>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <p><strong>Lote:</strong></p>
+                        <div class="box">
+                            <p>
+                                {%if vacina.lote == ""%}
+                                    Não informado
+                                {%else%}
+                                    {{ vacina.lote }}
+                                {%endif%}
+                            </p>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <p><strong>Aplicador:</strong></p>
+                        <div class="box">
+                            <p>
+                                {{ vacina.enfermeiro }}
+                            </p>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <p><strong>Data e Hora de Aplicação:</strong></p>
+                        <div class="box">
+                            <p>
+                                {{ vacina.dh_aplicacao | date:"d/m/Y H:i" }}
+                            </p>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <p><strong>Data de Fabricação:</strong></p>
+                        <div class="box">
+                            <p>
+                                {{ vacina.dt_fabricacao| date:"d/m/Y" }}
+                            </p>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <p><strong>Data de Validade:</strong></p>
+                        <div class="box">
+                            <p>
+                                {{ vacina.dt_validade|date:"d/m/Y" }}
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="underline"></div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

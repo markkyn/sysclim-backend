@@ -28,9 +28,8 @@
                 <th>Sala</th>
                 <th>Data de Realização</th>
                 <th>Criado Por</th>
-                {% if request.user.cargo == "assistente"%}
+                <th>Status</th>
                 <th>Ações</th>
-                {%endif%}
             </tr>
         </thead>
         <tbody class="exames_body">
@@ -41,29 +40,23 @@
                 <td>{{consulta.sala}}</td>
                 <td>{{consulta.dh_realizacao|date:"d/m/Y"}}</td>
                 <td>{{consulta.created_by.nome}}</td>
-                {% if request.user.cargo == "assistente"%}
+                <td>{{consulta.status|capfirst}}</td>
                 <td>
                     {% if consulta.status == "agendada"%}
                     <a href="{% url 'medicina:reagendar_consulta' consulta.id %}" type="button"
                         class="btn btn-warning btn-sm file-viewer-action">
                         Reagendar Consulta
                     </a>
-                    {%endif%}
-
-                    {% if consulta.status == "agendada"%}
                     <a href="{% url 'medicina:cancelar_consulta' consulta.id %}" type="button"
                         class="btn btn-danger btn-sm file-viewer-action">
                         Cancelar Consulta
                     </a>
                     {%endif%}
                     
-                    {%endif%}
-                    {% if request.user.cargo == "assistente"%}
                     <a href="{% url 'medicina:realizar_consulta' consulta.id %}" type="button"
                         class="btn btn-primary btn-sm file-viewer-action">
                         Visualizar Consulta
                     </a>
-                    {%endif%}
                 </td>
 
             </tr>
