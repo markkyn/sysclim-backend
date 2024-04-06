@@ -43,9 +43,26 @@
                 <td>{{consulta.created_by.nome}}</td>
                 {% if request.user.cargo == "assistente"%}
                 <td>
-                    <a href="{% url 'medicina:reagendar_consulta' consulta.id %}" class="btn btn-primary btn-block">Reagendar Consulta</a>
+                    <button 
+                        href="{% url 'medicina:reagendar_consulta' consulta.id %}" 
+                        type="button" class="btn btn-warning btn-sm file-viewer-action">
+                        Reagendar Consulta
+                    </button>
+                    <button 
+                        href="{% url 'medicina:cancelar_consulta' consulta.id %}" 
+                        type="button" class="btn btn-danger btn-sm file-viewer-action">
+                        Cancelar Consulta
+                    </button>
+                    {%endif%}
+                    {% if request.user.cargo == "assistente"%}
+                    <button 
+                        href="{% url 'medicina:realizar_consulta' consulta.id %}" 
+                        type="button" class="btn btn-primary btn-sm file-viewer-action">
+                        Realizar Consulta
+                    </button>
+                    {%endif%}
                 </td>
-                {%endif%}
+                
             </tr>
             {% empty %}
             <tr>

@@ -1,0 +1,54 @@
+{% extends "base/base.html" %}
+{% load crispy_forms_tags %}
+{% block title %}Listar Consultas{%endblock%}
+
+
+{% block content%}
+<div class="row">
+    <div class="col-md-9">
+        <h2 class="custom-page-title">Profissionais ({{profissionais_count}})</h2>
+    </div>
+        <div class="clearfix visible-xs-block visible-sm-block">
+            <br>
+        </div>
+        {% if request.user.cargo == "assistente" %}
+        <div class="col-md-3">
+            <a href="{% url 'comum:cadastrar_profissional' %}"
+               class="btn btn-primary btn-block">Cadastrar Profissional</a>
+        </div>
+        {%endif%}
+</div>
+<div class="underline"></div>
+
+<div class="table-responsive">
+    <table class="table table-striped table-hover">
+        <thead>
+            <tr style="background-color: #00a2ff; color: whitesmoke;">
+                <th>Nome</th>
+                <th>Lote</th>
+                <th>Cargo</th>
+                <th>Genero</th>
+                <th>Email</th>
+                <th>Data de Nascimento</th>
+                <th>Endereco</th>
+            </tr>
+        </thead>
+        <tbody class="exames_body">
+            {% for vacina in vacinas %}
+                <tr>
+                    <td>{{vacina.nome}}</td>
+                    <td>{{vacina.lote}}</td>
+                    <td>{{vacina.genero}}</td>
+                    <td>{{vacina.cargo| capfirst}}</td>
+                    <td>{{vacina.email}}</td>
+                    <td>{{vacina.dt_nascimento}}</td>
+                    <td>{{vacina.endereco}}</td>
+                </tr>
+            {% empty %}
+                <tr>
+                    <td colspan="8" class="text-center">Nenhum Profissional cadastrado</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}
