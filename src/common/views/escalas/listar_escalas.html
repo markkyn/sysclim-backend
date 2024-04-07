@@ -1,0 +1,60 @@
+{% extends "base/base.html" %}
+{% load crispy_forms_tags %}
+{% block title %}Listar Escalas{%endblock%}
+
+
+{% block content%}
+<div class="row">
+    <div class="col-md-9">
+        <h2 class="custom-page-title">Escalas ({{escalas_count}})</h2>
+    </div>
+    <div class="clearfix visible-xs-block visible-sm-block">
+        <br>
+    </div>
+    {% if request.user.cargo == "assistente" %}
+    <div class="col-md-3">
+        <a href="{% url 'comum:cadastrar_escala' %}" class="btn btn-primary btn-block">Cadastrar Escala</a>
+    </div>
+    {%endif%}
+</div>
+<div class="underline"></div>
+
+<div class="table-responsive">
+    <table class="table table-striped table-hover">
+        <thead>
+            <tr style="background-color: #00a2ff; color: whitesmoke;">
+                <th class="text-center">Data de Início</th>
+                <th class="text-center">Data de Fim</th>
+                <th class="text-center">Horario de Início</th>
+                <th class="text-center">Horario de Fim</th>
+                <th class="text-center">Ativo</th>
+                <th class="text-center">Ações</th>
+            </tr>
+        </thead>
+        <tbody class="exames_body">
+            {% for escala in escalas %}
+            <tr>
+                <td class="text-center">{{escala.dt_inicio}}</td>
+                <td class="text-center">{{escala.dt_final}}</td>
+                <td class="text-center">{{escala.hr_inicio}}</td>
+                <td class="text-center">{{escala.hr_final}}</td>
+                {% if escala.ativo %}
+                <td class="text-center">Sim</td>
+                {% else %}
+                <td class="text-center">Não</td>
+                {% endif %}
+                <td class="text-center">
+                    <a href="{% url 'comum:aplicar_escala' %}" type="button"
+                        class="btn btn-primary btn-sm file-viewer-action">
+                        Aplicar a Profissional
+                    </a>
+                </td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="8" class="text-center">Nenhuma Escala cadastrada</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% endblock %}

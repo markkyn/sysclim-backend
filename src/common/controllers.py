@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 
-from common.models import Paciente, Assistente, Endereco, ProfissionalSaude, Sala
+from common.models import Paciente, Assistente, Endereco, ProfissionalSaude, Sala, Escala
 from medicina.models import Especialidade, Medico
 from enfermagem.models import Enfermeiro
 from common.forms import *
@@ -178,3 +178,36 @@ def cadastrar_especialidade(request):
         form = CadastroEspecialidadeForm()
 
     return render(request, "especialidades/cadastrar_especialidades.html", {'form': form})
+
+@login_required(login_url="/login/")
+def listar_escalas(request):
+    escalas = Escala.objects.all()
+    escalas_count = escalas.count()
+
+    return render(request, "escalas/listar_escalas.html", locals())
+
+@login_required(login_url="/login/")
+def cadastrar_escala(request):
+    if request.method == 'POST':
+        form = CadastroEscalaForm(request.POST)
+        if form.is_valid():
+            try:
+                escala = Escala.objects.create(
+                    dt_inicio = form.cleaned_data["data_inicio"],
+                    dt_final = form.cleaned_data["data_final"],
+                    hr_inicio = form.cleaned_data["hora_inicio"],
+                    hr_final = form.cleaned_data["hora_final"],
+                )
+
+                return redirect("index")
+            except Exception as e:
+                form.add_error(None, f"{str(e)}")
+                return render(request, "escalas/cadastrar_escala.html", {'form': form})
+    else:
+        form = CadastroEscalaForm()
+
+    return render(request, "escalas/cadastrar_escala.html", {'form': form})
+
+@login_required(login_url="/login/")
+def aplicar_escala(request):
+    pass

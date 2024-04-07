@@ -74,3 +74,45 @@ class CadastroSalaForm(forms.Form):
 class CadastroEspecialidadeForm(forms.Form):
     tuss = forms.CharField(label="TUSS", max_length=24)
     nome = forms.CharField(label="Nome da Especialidade", max_length=64)
+
+class CadastroEscalaForm(forms.Form):
+    data_inicio = forms.DateField(
+        label="Data de Início", 
+        widget=forms.DateInput(
+            format='%d/%m/%Y',
+            attrs={
+                "class": "form-control",
+                "type": "date"
+            })
+    )
+
+    data_final = forms.DateField(
+        label="Data de Fim", 
+        widget=forms.DateInput(
+            format='%d/%m/%Y',
+            attrs={
+                "class": "form-control",
+                "type": "date"
+            })
+    )
+
+    hora_inicio = forms.TimeField(
+        label="Hora de Início",
+        widget=forms.TimeInput(
+            format='%H:%M',
+            attrs={
+                "class": "form-control",
+                "type": "time"
+            })
+    )
+
+    hora_final = forms.TimeField(
+        label="Hora Final",
+        widget=forms.TimeInput(
+            format='%H:%M',
+            attrs={
+                "class": "form-control",
+                "type": "time"
+            })
+    )
+    

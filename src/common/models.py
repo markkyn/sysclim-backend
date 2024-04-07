@@ -141,6 +141,11 @@ class ProfissionalSaude(ModeloUsuario):
         on_delete = models.CASCADE
     )
 
+    escalas = models.ManyToManyField(
+        'Escala',
+        null = True
+    )
+
     @property
     def cpf_formatado(self):
         return f"{self.cpf[0:3]}.{self.cpf[3:6]}.{self.cpf[6:9]}-{self.cpf[9:11]}"

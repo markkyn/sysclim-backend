@@ -15,7 +15,12 @@ urlpatterns = [
     path("cadastrar_sala/", cadastrar_sala, name="cadastrar_sala"),
 
     # Especialidade
-    path("cadastrar_especialidade/", cadastrar_especialidade, name="cadastrar_especialidade")
+    path("cadastrar_especialidade/", cadastrar_especialidade, name="cadastrar_especialidade"),
+    
+    # Escalas
+    path("listar_escalas/", listar_escalas, name="listar_escalas"),
+    path("cadastrar_escala/", cadastrar_escala, name="cadastrar_escala"),
+    path("aplicar_escala/", aplicar_escala, name="aplicar_escala")
 
     #path("listar_salas/", listar_salas, name="listar_salas"),
 ]
