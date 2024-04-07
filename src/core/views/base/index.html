@@ -1,0 +1,129 @@
+{% extends "base/base.html" %}
+{% load crispy_forms_tags %}
+{% block title %}Página Inicial{%endblock%}
+
+{% block extra_css%}
+<style>
+    div.row {
+        margin: 0;
+    }
+</style>
+{%endblock%}
+
+
+{% block content %}
+<!-- Painel de Consulta -->
+<div class="row">
+    <div class="col-md-9">
+        <h2 class="custom-page-title">Painel de Funcionalidades</h2>
+    </div>
+</div>
+<div class="underline"></div>
+<div class="p-4">
+    <!-- Blocos das Funcionalidades -->
+    <div class="row">
+        <div class="col-lg-6 col-md-6">
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <h2 class="text-center">
+                                {{consultas_count}}
+                            </h2>
+                        </div>
+                        <div class="col-md-8">
+                            <h2 class="text-center">
+                                 Consultas
+                            </h2>
+                        </div>
+                        <div class="col-md-12">
+                            <h4 class="text-center">
+                                <a href="{% url 'medicina:listar_consultas' %}" class="btn btn-link" style="color: white"> 
+                                    Detalhes <i class="glyphicon glyphicon-circle-arrow-right"></i>
+                                </a>
+                            </h4>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-6 col-md-6">
+            <div class="panel panel-warning">
+                <div class="panel-heading">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <h2 class="text-center">
+                                {{exames_count}}
+                            </h2>
+                        </div>
+                        <div class="col-md-8">
+                            <h2 class="text-center">
+                                 Exames
+                            </h2>
+                        </div>
+                        <div class="col-md-12">
+                            <h4 class="text-center">
+                                <a href="#" class="btn btn-link" style="color: white"> Detalhes <i class="glyphicon glyphicon-circle-arrow-right"></i>
+                                </a>
+                            </h4>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-6 col-md-6">
+            <div class="panel panel-success">
+                <div class="panel-heading">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <h2 class="text-center">
+                                {{profissional_count}}
+                            </h2>
+                        </div>
+                        <div class="col-md-8">
+                            <h2 class="text-center">
+                                 Profissionais
+                            </h2>
+                        </div>
+                        <div class="col-md-12">
+                            <h4 class="text-center">
+                                <a href="{% url 'comum:listar_profissionais' %}" class="btn btn-link" style="color: white">
+                                    Detalhes <i class="glyphicon glyphicon-circle-arrow-right"></i>
+                                </a>
+                            </h4>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-6 col-md-6">
+            <div class="panel panel-danger">
+                <div class="panel-heading">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <h2 class="text-center">
+                                {{pacientes_count}}
+                            </h2>
+                        </div>
+                        <div class="col-md-8">
+                            <h2 class="text-center">
+                                 Pacientes
+                            </h2>
+                        </div>
+                        <div class="col-md-12">
+                            <h4 class="text-center">
+                                <a href="{% url 'comum:listar_pacientes' %}" class="btn btn-link" style="color: white">
+                                    Detalhes <i class="glyphicon glyphicon-circle-arrow-right"></i>
+                                </a>
+                            </h4>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="underline"></div>
+
+
+{% endblock %}

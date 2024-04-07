@@ -1,4 +1,9 @@
 from django.db import models
+from django.db.models import Q
+from django.apps import apps
+from datetime import datetime
+
+from autenticacao.models import *
 
 # Uso Geral
 class Endereco(models.Model):
@@ -43,6 +48,12 @@ class Endereco(models.Model):
 
     )
 
+    def __str__(self):
+        return f"{self.rua}, {self.numero} - {self.bairro}, {self.cidade} - {self.estado} - {self.cep}"
+
+    class Meta:
+        db_table = 'endereco'
+
 # Profissionais
 class Especialidade(models.Model):
     tuss = models.CharField( # código unico de especialidade de saúde
@@ -56,6 +67,12 @@ class Especialidade(models.Model):
         unique = True
     )
 
+    def __str__(self) -> str:
+        return f"{self.nome} ( TUSS: {self.tuss})"
+
+    class Meta:
+        db_table = 'especialidade'
+
 class Sala(models.Model):
     numero = models.IntegerField(
         primary_key = True,
@@ -63,17 +80,31 @@ class Sala(models.Model):
         blank = False
     )
 
-    especialidade = models.ForeignKey(
-        Especialidade,
-        null = True,
-        on_delete = models.SET_NULL
+    ativo = models.BooleanField(
+        default=True,
+        null = False
     )
+    
+    def verificar_disponibilidade(self, data_hora_inicio, duracao=1):
+        Consulta = apps.get_model('common', 'Consulta')
+        
+        data_hora_fim = data_hora_inicio + datetime.timedelta(hours=duracao)
 
-    disponivel = models.BooleanField(
-        default = True,
-    )
+        consultas_no_periodo = Consulta.objects.filter(
+            Q(dh_realizacao__lt=data_hora_fim) &
+            Q(dh_realizacao__gte=data_hora_inicio),
+            medico=self
+        ).exists()
 
-class ProfissionalSaude(models.Model):
+        return not consultas_no_periodo
+
+    def __str__(self):
+        return f"Sala {self.numero}"
+
+    class Meta:
+        db_table = 'sala'
+
+class ProfissionalSaude(ModeloUsuario):
     cpf = models.CharField(
         primary_key = True,
         max_length = 11,
@@ -88,9 +119,6 @@ class ProfissionalSaude(models.Model):
         max_length = 1,
     )
     
-    email = models.EmailField(
-    )
-
     dt_nascimento = models.DateField(
     )
     
@@ -112,24 +140,42 @@ class ProfissionalSaude(models.Model):
         null = False,
         on_delete = models.CASCADE
     )
+
+    @property
+    def getIdade(self):
+        return datetime.now().year - self.dt_nascimento.year
+
+
+    @property
+    def cpf_formatado(self):
+        return f"{self.cpf[0:3]}.{self.cpf[3:6]}.{self.cpf[6:9]}-{self.cpf[9:11]}"
+
+    def identificador_cargo(self):
+        Enfermeiro = apps.get_model('enfermagem', 'Enfermeiro')
+        Medico = apps.get_model('medicina', 'Medico')
+
+        if self.cargo == "assistente":
+            return Assistente.objects.get(profissional = self).id
+        elif self.cargo == "enfermeiro":
+            return Enfermeiro.objects.get(profissional = self).coren
+        elif self.cargo == "medico":
+            return Medico.objects.get(profissional = self).crm
+        
+
+    class Meta(ModeloUsuario.Meta):
+        db_table = 'profissional'
     
-class Enfermeiro(models.Model):
-    coren = models.CharField(
-        unique = True,
-        max_length = 12,
-        primary_key = True,
-    )
-
-    profissional = models.ForeignKey(
-        ProfissionalSaude,
-        on_delete = models.CASCADE
-    )
-
 # TODO: Incluir mais atributos relevantes para o Assistente ( talvez CPF e Formação )
 class Assistente(models.Model):
-    nome = models.CharField(
-        max_length = 64,
-    )
+    profissional = models.ForeignKey(ProfissionalSaude, on_delete=models.CASCADE)
+    nome = models.CharField(max_length = 64)
+
+
+    def __str__(self):
+        return self.email
+
+    class Meta(ModeloUsuario.Meta):
+        db_table = 'assistente'
 
 class Escala(models.Model):
     dt_inicio = models.DateField()
@@ -140,10 +186,23 @@ class Escala(models.Model):
 
     ativo = models.BooleanField(
         default = True
-    )  
+    )
+
+    profissionais = models.ManyToManyField(
+        ProfissionalSaude,
+        null = True
+    )
+
+    class Meta:
+        db_table = 'escala'
 
 # Paciente
 class Paciente(models.Model):
+    GENERO_CHOICES = (
+        ('M', 'Masculino'),
+        ('F', 'Feminino'),
+    )
+
     nome = models.CharField(
         max_length = 64,
         unique = True,
@@ -156,15 +215,23 @@ class Paciente(models.Model):
     )
     
     genero = models.CharField(
-        max_length = 1,
+        max_length = 1, 
+        choices=GENERO_CHOICES
     )
 
     email = models.EmailField(
     )
 
     dt_nascimento = models.DateField(
+        "Data de Nascimento",
         null  = False, 
         blank = False
+    )
+
+    endereco = models.ForeignKey(
+        Endereco,
+        on_delete = models.DO_NOTHING,
+        default= None
     )
 
     created_by = models.ForeignKey(
@@ -172,3 +239,17 @@ class Paciente(models.Model):
         on_delete = models.DO_NOTHING,
         default = None
     )
+
+    def __str__(self):
+        return f"{self.nome} ({self.cpf_formatado})"
+
+    @property
+    def cpf_formatado(self):
+        return f"{self.cpf[0:3]}.{self.cpf[3:6]}.{self.cpf[6:9]}-{self.cpf[9:11]}"
+
+    @property
+    def getIdade(self):
+        return datetime.now().year - self.dt_nascimento.year
+
+    class Meta:
+        db_table = 'paciente'

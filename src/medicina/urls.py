@@ -1,24 +1,16 @@
 from django.urls import path
-from .views import *
+from medicina.controllers import *
 
 urlpatterns = [
-    # Consulta
-    path('consultas/', list_consultas, name='list_consultas'),
-    path('consultas/create', create_consulta, name='create_consulta'),
-    path('consultas/<int:pk>/', get_consulta, name='get_consulta'),
+    path("listar_consultas/", listar_consultas, name="listar_consultas"),
+    path("agendar_consulta/", agendar_consulta, name="agendar_consulta"),
     
-    # Exames
-    path('exames/', list_exames, name='list_exames'),
-    path('exames/create', create_exame, name='create_exame'),
-    path('exames/<int:pk>/', get_exame, name='get_exame'),
+    path("reagendar_consulta/<int:id>", reagendar_consulta, name="reagendar_consulta"),
+    path("cancelar_consulta/<int:id>", cancelar_consulta, name="cancelar_consulta"),
+    path("realizar_consulta/<int:id>", realizar_consulta, name="realizar_consulta"),
+    path("finalizar_consulta/<int:id>", finalizar_consulta, name="finalizar_consulta"),
 
-    # Prontuario
-    path('prontuarios/', list_prontuarios, name='list_prontuarios'),
-    path('prontuarios/create', create_prontuario, name='create_prontuario'),
-    path('prontuarios/<int:pk>/', get_prontuario, name='get_prontuario'),
-    
-    # Atestado
-    path('atestados/', list_atestados, name='list_atestados'),
-    path('atestados/create', create_atestado, name='create_atestado'),
-    path('atestados/<int:pk>/', get_atestado, name='get_atestado'),
+    path("emitir_atestado/<int:id>", emitir_atestado, name="emitir_atestado"),
+
+    path("visualizar_prontuario/<str:paciente_cpf>", visualizar_prontuario, name="visualizar_prontuario"),
 ]
