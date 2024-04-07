@@ -10,6 +10,7 @@ urlpatterns = [
     # Profissional
     path("listar_profissionais/", listar_profissionais, name="listar_profissionais"),
     path("cadastrar_profissional/", cadastrar_profissional, name="cadastrar_profissional"),
+    path("visualizar_profissional/<int:profissional_cpf>", visualizar_profissional, name="visualizar_profissional"),
 
     # Sala
     path("cadastrar_sala/", cadastrar_sala, name="cadastrar_sala"),

@@ -1,0 +1,132 @@
+{% extends "base/base.html" %}
+{% load crispy_forms_tags %}
+{% block title %}Visualizar Profissional{%endblock%}
+
+
+{% block content%}
+<div class="row">
+    <div class="col-md-6">
+        <h2 class="custom-page-title">Visualizar Profissional</h2>
+    </div>
+</div>
+<div class="underline"></div>
+<!-- Dados do Paciente -->
+<div class="panel-group" id="accordion2" role="tablist" aria-multiselectable="true">
+    <div class="panel panel-primary">
+        <div class="panel-heading" role="tab" id="headingTwo">
+            <h4 class="panel-title">
+                Dados do Profissional
+            </h4>
+        </div>
+        <div id="collapseTwo" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingTwo">
+            <div class="panel-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <p><strong>Nome:</strong></p>
+                        <div class="box">
+                            <p>
+                                {{ profissional.nome }}
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <p><strong>CPF:</strong></p>
+                        <div class="box">
+                            <p>
+                                {% if profissional.cpf %}
+                                {{ profissional.cpf_formatado }}
+                                {% else %}
+                                Não informado
+                                {% endif %}
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <p><strong>Data de Nascimento:</strong></p>
+                        <div class="box">
+                            <p>{{ profissional.dt_nascimento|date:"d/m/Y" }} (<strong>{{ profissional.getIdade }}
+                                    anos</strong>)</p>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <p><strong>Sexo:</strong></p>
+                        <div class="box">
+                            <p>
+                                {% if profissional.genero == 'M' %}
+                                Masculino
+                                {% else %}
+                                Feminino
+                                {% endif %}
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <p><strong>Município:</strong></p>
+                        <div class="box">
+                            <p>
+                                {{ profissional.endereco }}
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Dados de Escala -->
+<div class="panel-group" id="accordion2" role="tablist" aria-multiselectable="true">
+    <div class="panel panel-primary">
+        <div class="panel-heading" role="tab" id="headingTwo">
+            <h4 class="panel-title">
+                Escalas Atribuidas
+            </h4>
+        </div>
+        <div id="collapseTwo" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingTwo">
+            <div class="panel-body">
+                {% for escala in escalas %}
+                <div class="row">
+                    <div class="col-md-6">
+                        <p><strong>Data de Inicio:</strong></p>
+                        <div class="box">
+                            <p>
+                                {{ escala.dt_inicio }}
+                            </p>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <p><strong>Data de Final:</strong></p>
+                        <div class="box">
+                            <p>
+                                {{ escala.dt_final }}
+                            </p>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <p><strong>Hora de Início:</strong></p>
+                        <div class="box">
+                            <p>
+                                {{ escala.hr_inicio }}
+                            </p>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <p><strong>Hora de Final:</strong></p>
+                        <div class="box">
+                            <p>
+                                {{ escala.hr_final }}
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="underline"></div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

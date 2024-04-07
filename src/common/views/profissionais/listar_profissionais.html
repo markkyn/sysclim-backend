@@ -31,6 +31,7 @@
                 <th>Email</th>
                 <th>Data de Nascimento</th>
                 <th>Endereco</th>
+                <th>Ações</th>
             </tr>
         </thead>
         <tbody class="exames_body">
@@ -43,6 +44,12 @@
                     <td>{{profissional.email}}</td>
                     <td>{{profissional.dt_nascimento}}</td>
                     <td>{{profissional.endereco}}</td>
+                    <td>
+                        <a href="{% url 'comum:visualizar_profissional' profissional.cpf %}" type="button"
+                            class="btn btn-primary btn-sm file-viewer-action">
+                            Visualizar Profissional
+                        </a>
+                    </td>
                 </tr>
             {% empty %}
                 <tr>

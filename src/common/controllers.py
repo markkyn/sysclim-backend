@@ -131,6 +131,16 @@ def cadastrar_profissional(request):
 
     return render(request, "profissionais/cadastrar_profissional.html", {'form': form})
 
+def visualizar_profissional(request, profissional_cpf):
+    profissional = get_object_or_404(ProfissionalSaude, cpf=profissional_cpf)
+    escalas = Escala.objects.filter(profissionais=profissional)
+    if profissional.cargo == "médico":
+        cargo = Medico.objects.get(profissional=profissional)
+    elif profissional.cargo == "enfermeiro":
+        cargo = Enfermeiro.objects.get(profissional=profissional)
+
+    return render(request, "profissionais/visualizar_profissional.html", locals())
+
 # DEPENDENCIAS
 @login_required(login_url="/login/")
 def listar_salas(request):
@@ -158,7 +168,7 @@ def cadastrar_sala(request):
 
     return render(request, "dependencias/cadastrar_sala.html", {'form': form})
 
-# Especialidades
+# ESPECIALIDADES
 @login_required(login_url="/login/")
 def cadastrar_especialidade(request):
     if request.method == 'POST':
@@ -179,6 +189,7 @@ def cadastrar_especialidade(request):
 
     return render(request, "especialidades/cadastrar_especialidades.html", {'form': form})
 
+# ESCALAS
 @login_required(login_url="/login/")
 def listar_escalas(request):
     escalas = Escala.objects.all()

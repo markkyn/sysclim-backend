@@ -141,6 +141,10 @@ class ProfissionalSaude(ModeloUsuario):
         on_delete = models.CASCADE
     )
 
+    @property
+    def getIdade(self):
+        return datetime.now().year - self.dt_nascimento.year
+
 
     @property
     def cpf_formatado(self):
