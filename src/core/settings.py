@@ -33,7 +33,7 @@ DATABASES = {
         'NAME': 'sysclim',
         'PORT': '5432',
         'USER': 'postgres',
-        'PASSWORD':'123456',
+        'PASSWORD': '123456',
     }
 }
 
@@ -48,7 +48,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.postgres',
-    
+
     # Project Apps
     'common',
     'medicina',
@@ -120,7 +120,6 @@ AUTH_PASSWORD_VALIDATORS = [
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
 ]
-
 
 # Internationalization
 # https://docs.djangoproject.com/en/3.2/topics/i18n/
