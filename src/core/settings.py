@@ -15,7 +15,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = ["*"]
 
-DATABASES = {
+'''DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql",
         'HOST': 'host.docker.internal',
@@ -23,6 +23,17 @@ DATABASES = {
         'PORT': '5123',
         'USER': 'admin',
         'PASSWORD':'password',
+    }
+}'''
+
+DATABASES = {
+    "default": {
+        "ENGINE": "django.db.backends.postgresql",
+        'HOST': 'localhost',
+        'NAME': 'sysclim',
+        'PORT': '5432',
+        'USER': 'postgres',
+        'PASSWORD':'123456',
     }
 }
 
