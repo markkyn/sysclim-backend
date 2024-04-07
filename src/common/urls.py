@@ -20,7 +20,7 @@ urlpatterns = [
     # Escalas
     path("listar_escalas/", listar_escalas, name="listar_escalas"),
     path("cadastrar_escala/", cadastrar_escala, name="cadastrar_escala"),
-    path("aplicar_escala/", aplicar_escala, name="aplicar_escala")
+    path("aplicar_escala/<int:escala_id>", aplicar_escala, name="aplicar_escala")
 
     #path("listar_salas/", listar_salas, name="listar_salas"),
 ]

@@ -209,5 +209,26 @@ def cadastrar_escala(request):
     return render(request, "escalas/cadastrar_escala.html", {'form': form})
 
 @login_required(login_url="/login/")
-def aplicar_escala(request):
-    pass
+def aplicar_escala(request, escala_id):
+    escala = Escala.objects.get(id=escala_id)
+    profissionais_ids = escala.profissionais.all().values_list('cpf', flat=True)
+    if request.method == 'POST':
+        form = AplicarEscalaForm(request.POST)
+        if form.is_valid():
+            try:
+                profissionais = form.cleaned_data["profissionais"]
+                escala.profissionais.set(profissionais)
+
+                return redirect("index")
+
+            except Exception as e:
+                form.add_error(None, f"{str(e)}")
+                return render(request, "escalas/aplicar_escala.html", {'form': form})
+    else:
+        form = AplicarEscalaForm(
+            initial={
+                "profissionais": escala.profissionais.all().values_list('cpf', flat=True)
+            }
+        )
+
+    return render(request, "escalas/aplicar_escala.html", {'form': form})

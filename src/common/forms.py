@@ -1,6 +1,6 @@
 from django import forms
 
-from common.models import Paciente, Especialidade
+from common.models import Paciente, Especialidade, ProfissionalSaude
 
 GENERO_CHOICES = (
     (None, "Selecione o Genero"),
@@ -114,5 +114,12 @@ class CadastroEscalaForm(forms.Form):
                 "class": "form-control",
                 "type": "time"
             })
+    )
+
+class AplicarEscalaForm(forms.Form):
+    profissionais = forms.ModelMultipleChoiceField(
+        queryset=ProfissionalSaude.objects.all(),
+        widget=forms.CheckboxSelectMultiple(),
+        required=False
     )
     

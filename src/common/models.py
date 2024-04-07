@@ -141,10 +141,6 @@ class ProfissionalSaude(ModeloUsuario):
         on_delete = models.CASCADE
     )
 
-    escalas = models.ManyToManyField(
-        'Escala',
-        null = True
-    )
 
     @property
     def cpf_formatado(self):
@@ -186,6 +182,11 @@ class Escala(models.Model):
 
     ativo = models.BooleanField(
         default = True
+    )
+
+    profissionais = models.ManyToManyField(
+        ProfissionalSaude,
+        null = True
     )
 
     class Meta:
