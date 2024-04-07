@@ -13,4 +13,9 @@ urlpatterns = [
     path("emitir_atestado/<int:id>", emitir_atestado, name="emitir_atestado"),
 
     path("visualizar_prontuario/<str:paciente_cpf>", visualizar_prontuario, name="visualizar_prontuario"),
+
+    path("listar_exames/", listar_exames, name="listar_exames"),
+    path("agendar_exame/", agendar_exame, name="agendar_exame"),
+    path("reagendar_exame/<int:id>", reagendar_exame, name="reagendar_exame"),
+
 ]

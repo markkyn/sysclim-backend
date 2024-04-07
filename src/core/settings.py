@@ -15,7 +15,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 
-DATABASES = {
+'''DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql",
         'HOST': 'host.docker.internal',
@@ -23,6 +23,17 @@ DATABASES = {
         'PORT': '5123',
         'USER': 'admin',
         'PASSWORD':'password',
+    }
+}'''
+
+DATABASES = {
+    "default": {
+        "ENGINE": "django.db.backends.postgresql",
+        'HOST': 'localhost',
+        'NAME': 'sysclim',
+        'PORT': '5432',
+        'USER': 'postgres',
+        'PASSWORD': '123456',
     }
 }
 
@@ -37,7 +48,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.postgres',
-    
+
     # Project Apps
     'common',
     'medicina',
@@ -109,7 +120,6 @@ AUTH_PASSWORD_VALIDATORS = [
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
 ]
-
 
 # Internationalization
 # https://docs.djangoproject.com/en/3.2/topics/i18n/
