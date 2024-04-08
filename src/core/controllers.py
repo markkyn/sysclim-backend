@@ -18,6 +18,9 @@ def login_ctrl(request):
             user = authenticate(request, email=email, password=password)
             if user is not None:
                 login(request, user)
+                if password == 'abcd1234':
+                    sweetify.warning(request, 'Por favor, altere sua senha!')
+                    return redirect('visualizar_perfil', usuario_cpf=user.cpf)
                 return redirect('index')
             else:
                 login_form.add_error(None, "Email ou senha incorretos.")
