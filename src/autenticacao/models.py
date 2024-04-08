@@ -1,8 +1,10 @@
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
 from django.db import models
 
+
 class BaseUsuarioManager(BaseUserManager):
-    def create_user(self, email, cpf, nome, genero, dt_nascimento, cargo, especialidade_id, endereco_id, password=None,ativo=True, **extra_fields):
+    def create_user(self, email, cpf, nome, genero, dt_nascimento, cargo, especialidade_id, endereco_id, password=None,
+                    ativo=True, **extra_fields):
         """
         Cria e retorna um usuário (profissional) com um email, cpf, nome, genero, data de nascimento, 
         cargo, status ativo, especialidade, endereco e senha.
@@ -21,7 +23,16 @@ class BaseUsuarioManager(BaseUserManager):
             raise ValueError('O cargo é necessário.')
 
         email = self.normalize_email(email)
-        
+
+        print('Email:', email)
+        print('CPF:', cpf)
+        print('Nome:', nome)
+        print('Genero:', genero)
+        print('Data de Nascimento:', dt_nascimento)
+        print('Cargo:', cargo)
+        print('Especialidade:', especialidade_id)
+        print('Endereco:', endereco_id)
+        print('Senha:', password)
         profissional = self.model(
             email=email,
             cpf=cpf,
@@ -34,12 +45,14 @@ class BaseUsuarioManager(BaseUserManager):
             endereco_id=endereco_id,
             **extra_fields
         )
+        print(profissional)
         profissional.set_password(password)
         profissional.save(using=self._db)
-        
+
         return profissional
 
-    def create_superuser(self, email, cpf, nome, genero, dt_nascimento, cargo, especialidade_id, endereco_id, password=None, ativo=True, **extra_fields):
+    def create_superuser(self, email, cpf, nome, genero, dt_nascimento, cargo, especialidade_id, endereco_id,
+                         password=None, ativo=True, **extra_fields):
         """
         Cria e retorna um superusuário (profissional) com um email, cpf, nome, genero, data de nascimento, 
         cargo, status ativo, especialidade, endereco e senha, além de marcá-lo como staff e superuser.
@@ -52,8 +65,10 @@ class BaseUsuarioManager(BaseUserManager):
         if extra_fields.get('is_superuser') is not True:
             raise ValueError('Superusuário deve ter is_superuser=True.')
 
-        return self.create_user(email, cpf, nome, genero, dt_nascimento, cargo, especialidade_id, endereco_id, password, ativo, **extra_fields)
-    
+        return self.create_user(email, cpf, nome, genero, dt_nascimento, cargo, especialidade_id, endereco_id, password,
+                                ativo, **extra_fields)
+
+
 class ModeloUsuario(AbstractBaseUser, PermissionsMixin):
     email = models.EmailField(unique=True)
     is_staff = models.BooleanField(default=False)
@@ -62,9 +77,8 @@ class ModeloUsuario(AbstractBaseUser, PermissionsMixin):
     objects = BaseUsuarioManager()
 
     USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = ['dt_nascimento', 'endereco_id', 'cpf', 'nome', 'genero', 'cargo', 'especialidade_id' ]
+    REQUIRED_FIELDS = ['dt_nascimento', 'endereco_id', 'cpf', 'nome', 'genero', 'cargo', 'especialidade_id']
 
     class Meta:
         db_table = 'modelousuario'
         abstract = True
-

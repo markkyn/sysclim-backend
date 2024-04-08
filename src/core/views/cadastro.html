@@ -1,0 +1,21 @@
+{% extends "base/base.html" %}
+{% load crispy_forms_tags %}
+{% block title %}Autenticação{%endblock%}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-9">
+        <h2 class="custom-page-title">Cadastro de Usuário</h2>
+    </div>
+</div>
+<div class="underline"></div>
+<form class="form-signin" action="" method="post" id="login-form">
+    {{ form | crispy }}
+    {% csrf_token %}
+     <div class="d-flex">
+        <button class="btn btn-login btn-block" type="submit" name="entrar">
+            <strong>Cadastrar Usuário</strong>
+        </button>
+    </div>
+</form>
+{% endblock %}

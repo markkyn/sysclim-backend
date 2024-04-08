@@ -58,6 +58,9 @@ INSTALLED_APPS = [
     # 3rd Party Apps
     'crispy_forms',
     "crispy_bootstrap4",
+
+    # plugin
+    'sweetify',
 ]
 AUTH_USER_MODEL = 'common.ProfissionalSaude'
 
