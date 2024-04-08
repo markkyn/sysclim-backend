@@ -161,7 +161,8 @@ class ProfissionalSaude(ModeloUsuario):
         elif self.cargo == "medico":
             return Medico.objects.get(profissional = self).crm
         
-
+    def __str__(self):
+        return f"{self.nome} ({self.cpf_formatado}"
     class Meta(ModeloUsuario.Meta):
         db_table = 'profissional'
     

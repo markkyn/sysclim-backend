@@ -1,3 +1,4 @@
+{% load sweetify %}
 {% load static %}
 {% load crispy_forms_tags %}
 <!DOCTYPE html>
@@ -36,22 +37,36 @@
                 <div id="navbar" class="navbar-collapse collapse">
                     <ul class="nav navbar-nav navbar-menu">
                         <li><a href="{% url 'index' %}">Início</a></li>
-                    {% if user.is_authenticated  and request.user.cargo == "assistente" %}
+                        {% if user.is_authenticated and request.user.cargo == "assistente" or request.user.cargo == "admin"%}
                         <li><a href="{% url 'comum:cadastrar_sala' %}">Cadastrar Sala</a></li>
                         <li><a href="{% url 'comum:cadastrar_especialidade' %}">Cadastrar Especialidade</a></li>
                         <li><a href="{% url 'enfermagem:listar_vacinas' %}">Listar Vacinas</a></li>
                         <li><a href="{% url 'comum:listar_escalas' %}">Listar Escalas</a></li>
-                    {% endif %}
-                    </ul>
-                    <ul class="nav navbar>nav navbar-right">
-                        {% if user.is_authenticated %}
-                        <li style="color: aliceblue;">{{request.user.nome}} ( {{request.user.cargo|capfirst}} )</li>
-                        <li class="text-center"><a href="{% url 'logout' %}">Sair</a></li>
-                        {% else %}
-                        <li><a href="{% url 'login' %}">Entrar</a></li>
                         {% endif %}
                     </ul>
-                    
+                    <ul class="nav navbar-nav navbar-right">
+                        {% if user.is_authenticated %}
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                                <span class="glyphicon glyphicon-user" style="padding: 1rem"></span>
+                                {{ user.nome}}
+                                <b class="caret"></b>
+                            </a>
+                            <ul class="dropdown-menu">
+                                <!-- Adicione aqui os itens do dropdown, por exemplo: -->
+                                {%if user.is_authenticated and request.user.cargo == "admin" %}
+                                <li><a href="{% url 'cadastro' %}">Cadastrar Usuario</a></li>
+                                    <li><a href="{% url 'visualizar_usuarios' %}">Lista de Usuarios</a></li>
+                                    <li class="divider"></li>
+                                {% endif %}
+                                {%if user.is_authenticated %}
+                                <li><a href="{% url 'visualizar_perfil' request.user.cpf %}">Atualizar Perfil</a></li>
+                                <li><a href="{% url 'logout' %}">Sair</a></li>
+                                {% endif %}
+                            </ul>
+                        </li>
+                        {% endif %}
+                    </ul>
                 </div>
             </div>
         </nav>
@@ -85,10 +100,14 @@
         </div>
     </footer>
 
-
     <!-- JavaScripts -->
     {% block extra_script %}
     {% endblock %}
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
 </body>
-
 </html>
+
+{% load sweetify %}
+{% sweetify %}

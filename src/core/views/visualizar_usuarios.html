@@ -1,0 +1,49 @@
+{% extends "base/base.html" %}
+{% load crispy_forms_tags %}
+{% block title %}Lista de Usuarios{%endblock%}
+
+
+{% block content%}
+<div class="row">
+    <div class="clearfix visible-xs-block visible-sm-block">
+        <br>
+    </div>
+    {% if request.user.cargo == "admin"%}
+    <div class="col-md-3">
+        <a href="{% url 'cadastro' %}" class="btn btn-primary btn-block">Adicionar Usuario</a>
+    </div>
+    {% endif %}
+</div>
+<div class="underline"></div>
+
+<div class="table-responsive">
+    <table class="table table-striped table-hover">
+        <thead>
+            <tr style="background-color: #00a2ff; color: whitesmoke;">
+                <th>Nome</th>
+                <th>CPF</th>
+                <th>Genero</th>
+                <th>Cargo</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody class="exames_body">
+            {% for usuario in usuarios %}
+            <tr>
+                <td class="text-center">{{usuario.nome}}</td>
+                <td>{{usuario.cpf}}</td>
+                <td>{{usuario.genero}}</td>
+                <td>{{usuario.cargo}}</td>
+                <td>
+                    <a href="{% url 'resetar_password' usuario.cpf %}" class="btn btn-primary btn-sm">Resetar senha</a>
+                    <a href="{% url 'delete' usuario.cpf %}" class="btn btn-danger btn-sm">Deletar</a>
+                </td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="8" class="text-center">Nenhuma Usuario CADASTRADO</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% endblock %}
