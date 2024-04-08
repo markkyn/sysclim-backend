@@ -15,7 +15,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 
-DATABASES = {
+'''DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql",
         'HOST': 'host.docker.internal',
@@ -24,9 +24,9 @@ DATABASES = {
         'USER': 'admin',
         'PASSWORD':'password',
     }
-}
+}'''
 
-'''DATABASES = {
+DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql",
         'HOST': 'localhost',
@@ -35,7 +35,7 @@ DATABASES = {
         'USER': 'postgres',
         'PASSWORD': '123456',
     }
-}'''
+}
 
 # Application definition
 

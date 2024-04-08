@@ -40,7 +40,7 @@
                         {% if user.is_authenticated and request.user.cargo == "assistente" or request.user.cargo == "admin"%}
                         <li><a href="{% url 'comum:cadastrar_sala' %}">Cadastrar Sala</a></li>
                         <li><a href="{% url 'comum:cadastrar_especialidade' %}">Cadastrar Especialidade</a></li>
-                        <!--<li><a href="{% url 'enfermagem:listar_vacinas' %}">Listar Vacinas</a></li>-->
+                        <li><a href="{% url 'enfermagem:listar_vacinas' %}">Listar Vacinas</a></li>
                         <li><a href="{% url 'comum:listar_escalas' %}">Listar Escalas</a></li>
                         {% endif %}
                     </ul>
