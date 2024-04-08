@@ -4,7 +4,7 @@
 
 
 {% block content%}
-<div class="row">
+<!--<div class="row">
     <div class="col-md-9">
         <h2 class="custom-page-title">Vacinas ({{vacinas_count}})</h2>
     </div>
@@ -35,31 +35,8 @@
             </tr>
         </thead>
         <tbody class="exames_body">
-            {% for vacina in vacinas %}
-            <tr>
-                <td>{{vacina.nome}}</td>
-                <td>{{vacina.lote}}</td>
-                <td>{{vacina.dt_cadastro|date:"d/m/Y"}}</td>
-                <td>{{vacina.dt_fabricacao|date:"d/m/Y"}}</td>
-                <td>{{vacina.dt_validade|date:"d/m/Y"}}</td>
-                <td>{{vacina.descricao}}</td>
-                <td>{{vacina.status}}</td>
-                {%if vacina.status != "Não aplicada" %}
-                    <td>{{vacina.paciente.nome}}</td>
-                {%else%}
-                    <td>-</td>
-                {%endif%}
-                {%if vacina.status != "Não aplicada"  %}
-                    <td>{{vacina.enfermeiro.nome}}</td>
-                {%else%}
-                    <td>-</td>
-                {%endif%}
-            </tr>
-            {% empty %}
-            <tr>
-                <td colspan="8" class="text-center">Nenhuma Vacina cadastrada</td>
-            </tr>
-            {% endfor %}
+
         </tbody>
     </table>
     {% endblock %}
+-->

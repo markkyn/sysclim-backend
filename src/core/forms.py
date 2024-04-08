@@ -70,7 +70,7 @@ class AtualizarForm(forms.Form):
     nome = forms.CharField(label='Nome', widget=forms.TextInput(attrs={'autofocus': True}))
     cpf = forms.CharField(label='CPF', max_length=11, min_length=11)
     genero = forms.ChoiceField(label='Genero', choices=GENERO_CHOICES)
-    dt_nascimento = forms.DateField(label='Data de Nascimento', widget=forms.DateInput(format='%d/%m/%Y', attrs={'class': 'form-control', 'type': 'date'}))
+    dt_nascimento = forms.DateField(label='Data de Nascimento', widget=forms.DateInput(format=['%d-%m-%Y'], attrs={'class': 'form-control', 'type': 'date'}))
     cargo = forms.ChoiceField(label="Cargo", choices=CARGO_CHOICES)
     especialidade = forms.ModelChoiceField(label='Especialidade', queryset=Especialidade.objects.all())
     email = forms.EmailField(label='Email', widget=forms.EmailInput(attrs={'autofocus': True}))
